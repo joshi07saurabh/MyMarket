@@ -1,22 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './screens/Home';
+import Main from './screens/Main';
+import Login from './screens/auth/Login';
+import Register from './screens/auth/Register';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import ShopProfile from './screens/ShopProfile';
 
+const Stack = createNativeStackNavigator();
 export default function App() {
   return (
-    <View style={styles.container}>
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
-      {/* <Text>MY Market</Text> */}
-      <Image source={require('./assets/logo.png')} />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen options={{headerShown: false}} name="Home" component={Home} />
+        <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
+        <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
+        <Stack.Screen options={{headerShown: false}} name="Register" component={Register} />
+        <Stack.Screen options={{headerShown: false}} name="ShopProfile" component={ShopProfile} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

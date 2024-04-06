@@ -1,0 +1,34 @@
+{
+    "shopData": [
+        {
+            "id":1,
+            "name":"Joshi Electronics",
+            "category": "Electronics",
+            "shopImage": "https://etimg.etb2bimg.com/photo/76159933.cms",
+            "address": "MOh. Chauhanan Near Temple Jaspur",
+            "city": "Jaspur",
+            "state": "Uttrakhand",
+            "coordinate": [1,2],
+            "ownerName": "Saurabh",
+            "contactDetails":{
+                "contact": "1234567875"
+            },
+            "itemList": []
+        },
+        {
+            "id":2,
+            "name":"Mukul Electronics",
+            "category":"Food Cart",
+            "address": "MOh. Chauhanan Near Temple Jaspur",
+            "shopImage": "https://etimg.etb2bimg.com/photo/76159933.cms",
+            "city": "Jaspur",
+            "state": "Uttrakhand",
+            "coordinate": [1,2],
+            "ownerName": "Saurabh",
+            "contactDetails":{
+                "contact": "1234567875"
+            },
+            "itemList": []
+        }
+    ]
+}
