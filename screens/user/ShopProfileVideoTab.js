@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const ShopProfile = () => {
+const ShopProfileVideoTab = () => {
   return (
     <View>
-      <Text>ShopProfile</Text>
+      <Text>ShopProfileVideoTab</Text>
     </View>
   )
 }
 
-export default ShopProfile
+export default ShopProfileVideoTab

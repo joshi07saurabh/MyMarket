@@ -9,7 +9,6 @@ const Main = () => {
   return (
     <SafeAreaView className='flex flex-1 w-full bg-white'>
       <Header/>
-      <ShopList/>
       <BottomBar/>
     </SafeAreaView>
   )

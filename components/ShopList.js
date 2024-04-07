@@ -6,7 +6,7 @@ import data from '../data/data.json'
 const ShopList = () => {
     const [shopData,setShopData] = useState(data.shopData)
   return (
-    <SafeAreaView className="flex flex-1 h-full w-full">
+    <SafeAreaView className="h-full w-full">
         {
             shopData?.map(shopItem=>{
                 return <ShopListItem key={shopItem.id} {...shopItem}/>
