@@ -1,4 +1,4 @@
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Avatar,
   Title,
@@ -8,9 +8,18 @@ import {
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import React from 'react'
+import {Linking} from 'react-native'
+
 
 const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
+  const goToCall = () => {  
+    Linking.openURL(`tel:${contactDetails.contact}`)
+  }
+  const goToWhatsapp = ()=>{
+    Linking.openURL(`whatsapp://send?phone=${contactDetails.contact}`)
+  }
   return (
     <SafeAreaView className='bg-white'>
       <View style={styles.userInfoSection}>
@@ -30,8 +39,8 @@ const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
           </View>
         </View>
       </View>
-
-      <View style={styles.userInfoSection}>
+      <View className='flex flex-row w-full justify-between'>
+      <View style={styles.userInfoSection} className='w-3/5'>
         <View style={styles.row}>
           <Icon name="map-marker-radius" color="#777777" size={20}/>
           <Text style={{color:"#777777", marginLeft: 20}}>{fullAddress}</Text>
@@ -43,6 +52,17 @@ const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
         <View style={styles.row}>
           <Icon name="email" color="#777777" size={20}/>
           <Text style={{color:"#777777", marginLeft: 20}}>{contactDetails.email}</Text>
+        </View>
+      </View>
+      <View className='mr-5 self-end mb-8'>
+      <TouchableOpacity onPress={goToCall} className='w-full bg-gray-800 p-3 text-white  rounded-md mb-2 flex flex-row'>
+      <Ionicons name="call-outline" color="#ffffff" size={16}/>
+          <Text className='text-white text-xs text-center mx-2'>Call</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={goToWhatsapp} className='w-full bg-gray-800 p-3 text-white rounded-md flex flex-row'>
+        <Ionicons name="chatbubbles-outline" color="#ffffff" size={16}/>
+          <Text className='text-white text-xs text-center mx-2'>Whatsapp</Text>
+        </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

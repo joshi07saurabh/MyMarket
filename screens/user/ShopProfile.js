@@ -16,7 +16,7 @@ const ShopProfile = () => {
     "coordinate": [1,2],
     "ownerName": "Saurabh",
     "contactDetails":{
-        "contact": "1234567875",
+        "contact": "+919997959451",
         "email" : "saurabh@gamil.com"
     },
     "itemList": []
