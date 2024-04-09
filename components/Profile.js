@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React from 'react'
 import {Linking} from 'react-native'
+import Badge from './Badge';
 
 
 const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
@@ -36,7 +37,8 @@ const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
               marginBottom: 5,
             }]}>{name}</Title>
             <Caption style={styles.caption}>{userName}</Caption>
-          </View>
+            <Badge color='bg-green-500' status='Open'/>
+        </View>
         </View>
       </View>
       <View className='flex flex-row w-full justify-between'>
@@ -55,13 +57,13 @@ const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
         </View>
       </View>
       <View className='mr-5 self-end mb-8'>
-      <TouchableOpacity onPress={goToCall} className='w-full bg-gray-800 p-3 text-white  rounded-md mb-2 flex flex-row'>
+      <TouchableOpacity onPress={goToCall} className='w-full bg-gray-800 p-3 text-white  rounded-full mb-2 flex flex-row'>
       <Ionicons name="call-outline" color="#ffffff" size={16}/>
-          <Text className='text-white text-xs text-center mx-2'>Call</Text>
+          {/* <Text className='text-white text-xs text-center mx-2'>Call</Text> */}
         </TouchableOpacity>
-        <TouchableOpacity onPress={goToWhatsapp} className='w-full bg-gray-800 p-3 text-white rounded-md flex flex-row'>
+        <TouchableOpacity onPress={goToWhatsapp} className='w-full bg-gray-800 p-3 text-white rounded-full flex flex-row'>
         <Ionicons name="chatbubbles-outline" color="#ffffff" size={16}/>
-          <Text className='text-white text-xs text-center mx-2'>Whatsapp</Text>
+          {/* <Text className='text-white text-xs text-center mx-2'>Whatsapp</Text> */}
         </TouchableOpacity>
         </View>
       </View>
@@ -86,8 +88,9 @@ const styles = StyleSheet.create({
     },
     caption: {
       fontSize: 14,
-      lineHeight: 14,
+      // lineHeight: 14,
       fontWeight: '500',
+      height:0
     },
     row: {
       flexDirection: 'row',

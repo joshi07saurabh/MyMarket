@@ -19,6 +19,9 @@ const ShopProfileTabBar = () => {
         initialRouteName = {ShopProducts}
         screenOptions ={({route}) => ({
           tabBarShowLabel: false,
+          tabBarIndicatorStyle:{
+            backgroundColor: 'black'
+          },
           tabBarIcon : ({focused, color, size}) =>{
             let iconName;
             let rn = route.name;
