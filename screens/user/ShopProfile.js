@@ -22,7 +22,7 @@ const ShopProfile = () => {
     "itemList": []
 }
   return (
-    <View className='flex'>
+    <View className='flex flex-1 bg-white'>
       <Profile {...shopDetails}/>
       <ShopProfileTabBar/>
     </View>

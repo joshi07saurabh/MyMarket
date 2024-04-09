@@ -12,7 +12,7 @@ import React from 'react'
 
 const Profile = ({shopImage,name,contactDetails,userName='',fullAddress}) => {
   return (
-    <SafeAreaView className='bg-gray-50'>
+    <SafeAreaView className='bg-white'>
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image 

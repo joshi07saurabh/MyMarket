@@ -18,18 +18,19 @@ const ShopProfileTabBar = () => {
       <Tab.Navigator
         initialRouteName = {ShopProducts}
         screenOptions ={({route}) => ({
+          tabBarShowLabel: false,
           tabBarIcon : ({focused, color, size}) =>{
             let iconName;
             let rn = route.name;
 
             if(rn === ShopPosts){
-              iconName = focused ? 'home' : 'home-outline'
+              iconName = focused ? 'image' : 'image-outline'
             } else if (rn === ShopVideos){
-              iconName = focused ? 'search' : 'search-outline'
+              iconName = focused ? 'videocam' : 'videocam-outline'
             }else if(rn === ShopProducts){
               iconName = focused ? 'list' : 'list-outline'
             }
-            return <Ionicons name={iconName} size={size} color={color}></Ionicons>
+            return <Ionicons name={iconName} size={25} color={color}></Ionicons>
           }
         })}
 >
