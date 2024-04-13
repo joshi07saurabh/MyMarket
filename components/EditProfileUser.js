@@ -19,7 +19,7 @@ import Animated from 'react-native-reanimated';
 
 import ImagePicker from 'react-native-image-crop-picker';
 
-const EditProfileScreen = () => {
+const EditProfileUser = () => {
 
   const [image, setImage] = useState('https://api.adorable.io/avatars/80/abott@adorable.png');
   const {colors} = useTheme();
@@ -233,7 +233,7 @@ const EditProfileScreen = () => {
   );
 };
 
-export default EditProfileScreen;
+export default EditProfileUser;
 
 const styles = StyleSheet.create({
   container: {

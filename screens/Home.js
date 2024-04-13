@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 const Home = () => {
     const navigation = useNavigation()
     const onPress = ()=>{
-        navigation.navigate('ProfileSelect')
+        navigation.navigate('Login')
     }
   return (
     <SafeAreaView className="flex flex-1 bg-white items-center justify-center">

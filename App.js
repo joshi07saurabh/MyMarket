@@ -9,6 +9,8 @@ import Register from './screens/auth/Register';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import ShopProfile from './screens/user/ShopProfile';
 import ProfileSelect from './components/ProfileSelect';
+import EditProfileUser from './components/EditProfileUser';
+import UserRegister from './screens/auth/UserRegister';
 
 
 const Stack = createNativeStackNavigator();
@@ -21,8 +23,10 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="Main" component={Main} />
         <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
         <Stack.Screen options={{headerShown: false}} name="Register" component={Register} />
+        <Stack.Screen options={{headerShown: false}} name="UserRegister" component={UserRegister} />
         <Stack.Screen options={{headerShown: false}} name="ShopProfile" component={ShopProfile} />
         <Stack.Screen options={{headerShown: false}} name="ProfileSelect" component={ProfileSelect} />
+        <Stack.Screen options={{headerShown: false}} name="EditProfileUser" component={EditProfileUser} />
       </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaProvider>

@@ -14,9 +14,10 @@ import { Linking } from 'react-native'
 import Badge from './Badge';
 import AppToggle from './AppToggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
+import ShopProfile from '../user/ShopProfile';
 
 
-const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress }) => {
+const ShopProfileForShop = ({ shopImage, name, contactDetails, userName = '', fullAddress }) => {
   const [isShopOpen,setIsShopOpen] = useState(true)
   const [isCustomer,setIsCustomer] = useState(false)
   const navigation = useNavigation()
@@ -30,7 +31,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress }
     setIsShopOpen(!isShopOpen)
   }
   const editProfile = ()=>{
-    navigation.navigate('EditProfileUser')
+    navigation.navigate('EditProfile')
   }
   return (
     <SafeAreaView className='bg-white'>
@@ -100,7 +101,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress }
   )
 }
 
-export default Profile
+export default ShopProfileForShop; 
 
 const styles = StyleSheet.create({
   container: {
