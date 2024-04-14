@@ -10,11 +10,14 @@ import SettingsScreen from './SettingsScreen'
 import UserProfileScreen from './UserProfileScreen';
 import SeachScreen from './SeachScreen';
 import ShopProfile from '../screens/user/ShopProfile';
-import PostFile from '../screens/shop/PostFile';
+
+import UserFavouriteShop from './user/UserFavouriteShop';
+import ShopProfileForShop from '../screens/shop/ShopProfileForShop';
 const homeName = 'Home';
 const search = 'Search';
-const profileName = 'UserProfile';
-const postFile= 'PostFile';
+// const profileName = 'UserProfile';
+const profileName = 'ShopProfileForShop';
+const favourite= 'Favourite Shop';
 const Tab = createBottomTabNavigator();
 
 const BottomBar = () => {
@@ -29,10 +32,12 @@ const BottomBar = () => {
 
             if(rn === homeName){
               iconName = focused ? 'home' : 'home-outline'
-            } else if (rn === postFile){
+            } else if (rn === search){
               iconName = focused ? 'search' : 'search-outline'
             }else if(rn === profileName){
               iconName = focused ? 'person' : 'person-outline'
+            }else if (rn === favourite){
+              iconName = focused ? 'heart' : 'heart-outline'
             }
             return <Ionicons name={iconName} size={size} color={color}></Ionicons>
           }
@@ -46,11 +51,13 @@ const BottomBar = () => {
         }}>
 
         <Tab.Screen name={homeName} options={{headerShown: false}} component={HomeScreen}></Tab.Screen>
-        {/* <Tab.Screen name={search} options={{headerShown: false}} component={SeachScreen}></Tab.Screen> */}
-        <Tab.Screen name={postFile} options={{headerShown: false}} component={PostFile}></Tab.Screen>
+        <Tab.Screen name={search} options={{headerShown: false}} component={SeachScreen}></Tab.Screen>
+        <Tab.Screen name={favourite} options={{headerShown: false}} component={UserFavouriteShop}></Tab.Screen>
         {
           isCustomer ? 
-          (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfileScreen}></Tab.Screen>):
+          //  (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfileScreen}></Tab.Screen>):
+           (<Tab.Screen name={profileName} options={{headerShown: false}} component={ShopProfileForShop}></Tab.Screen>):
+          
           (<Tab.Screen name={profileName} options={{headerShown: false}} component={ShopProfile}></Tab.Screen>)
 
         }

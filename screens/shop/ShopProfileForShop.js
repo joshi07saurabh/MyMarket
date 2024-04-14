@@ -11,27 +11,33 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React, { useState } from 'react'
 import { Linking } from 'react-native'
-import Badge from './Badge';
-import AppToggle from './AppToggle/AppToggle';
+import Badge from '../../components/Badge';
+import AppToggle from '../../components/AppToggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
 import ShopProfile from '../user/ShopProfile';
+import ShopProfileTabBar from '../../components/user/ShopProfileTabBar';
 
 
 const ShopProfileForShop = ({ shopImage, name, contactDetails, userName = '', fullAddress }) => {
   const [isShopOpen,setIsShopOpen] = useState(true)
   const [isCustomer,setIsCustomer] = useState(false)
-  const navigation = useNavigation()
-  const goToCall = () => {
-    Linking.openURL(`tel:${contactDetails.contact}`)
-  }
-  const goToWhatsapp = () => {
-    Linking.openURL(`whatsapp://send?phone=${contactDetails.contact}`)
-  }
+  
+  // const goToCall = () => {
+  //   Linking.openURL(`tel:${contactDetails.contact}`)
+  // }
+  // const goToWhatsapp = () => {
+  //   Linking.openURL(`whatsapp://send?phone=${contactDetails.contact}`)
+  // }
+  const navigation= useNavigation()
   const onToggle = ()=>{
     setIsShopOpen(!isShopOpen)
   }
+  
   const editProfile = ()=>{
-    navigation.navigate('EditProfile')
+    navigation.navigate('EditProfileShop')
+  }
+  const uploadpost = ()=>{
+    navigation.navigate('PostFile')
   }
   return (
     <SafeAreaView className='bg-white'>
@@ -62,15 +68,18 @@ const ShopProfileForShop = ({ shopImage, name, contactDetails, userName = '', fu
         <View style={styles.userInfoSection} className='w-3/5'>
           <View style={styles.row}>
             <Icon name="map-marker-radius" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }}>{fullAddress}</Text>
+            {/* <Text style={{ color: "#777777", marginLeft: 20 }}>{fullAddress}</Text> */}
+            <Text style={{ color: "#777777", marginLeft: 20 }}>Jaspur</Text>
           </View>
           <View style={styles.row}>
             <Icon name="phone" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails.contact}</Text>
+            {/* <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails.contact}</Text> */}
+            <Text style={{ color: "#777777", marginLeft: 20 }}>1234567890</Text>
           </View>
           <View style={styles.row}>
             <Icon name="email" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails.email}</Text>
+            {/* <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails.email}</Text> */}
+            <Text style={{ color: "#777777", marginLeft: 20 }}>joshi@gmail.com</Text>
           </View>
         </View>
         
@@ -93,10 +102,16 @@ const ShopProfileForShop = ({ shopImage, name, contactDetails, userName = '', fu
             <Text className='text-white text-semibold text-center mx-2'>Edit Profile</Text>
           </TouchableOpacity>
           <View style={styles.row} className='mr-14 mt-3'>
-            <Icon name="eye" color="black" size={20} />
-            <Text style={{ color: "black", marginLeft: 20 }} >123 Views</Text>
+            {/* <Icon name="eye" color="black" size={20} />
+            <Text style={{ color: "black", marginLeft: 20 }} >123 Views</Text> */}
+            <TouchableOpacity onPress={uploadpost} className='h-9 p-1.5  flex flex-row border-black border bg-black text-black rounded-md'>
+          <Ionicons name="pencil-outline" color="white" size={18} className='text-bold'/>
+
+            <Text className='text-white text-semibold text-center mx-2'>Upload Post</Text>
+          </TouchableOpacity>
           </View>
           </View>
+          <ShopProfileTabBar></ShopProfileTabBar>
     </SafeAreaView>
   )
 }

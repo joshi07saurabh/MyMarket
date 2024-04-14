@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, SafeAreaView, StyleSheet} from 'react-native';
+import {View, SafeAreaView, StyleSheet,TouchableOpacity} from 'react-native';
 import {
   Avatar,
   Title,
@@ -8,7 +8,10 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from "@react-navigation/native";
 
 // import Share from 'react-native-share';
 
@@ -29,6 +32,10 @@ const UserProfileScreen = () => {
   //     console.log('Error => ', error);
   //   }
   // };
+  const navigation = useNavigation()
+  const editProfile = ()=>{
+    navigation.navigate('EditProfileUser')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,8 +72,15 @@ const UserProfileScreen = () => {
           <Text style={{color:"#777777", marginLeft: 20}}>john_doe@email.com</Text>
         </View>
       </View>
+      <View className='w-full flex flex-row mx-8 justify-between items-center'>
+      <TouchableOpacity onPress={editProfile} className='h-9 p-1.5  flex flex-row border-black border bg-black text-black rounded-md'>
+          <Ionicons name="pencil-outline" color="white" size={18} className='text-bold'/>
 
-      <View style={styles.infoBoxWrapper}>
+            <Text className='text-white text-semibold text-center mx-2'>Edit Profile</Text>
+          </TouchableOpacity>
+      </View>
+
+      {/* <View style={styles.infoBoxWrapper}>
           <View style={[styles.infoBox, {
             borderRightColor: '#dddddd',
             borderRightWidth: 1
@@ -78,28 +92,29 @@ const UserProfileScreen = () => {
             <Title>12</Title>
             <Caption>Orders</Caption>
           </View>
-      </View>
+      </View> */}
 
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+        {/* <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
-            <Icon name="heart-outline" color="#FF6347" size={25}/>
+            <Icon name="heart-outline" color="#000000" size={25}/>
             <Text style={styles.menuItemText}>Your Favorites</Text>
           </View>
-        </TouchableRipple>
+        </TouchableRipple> */}
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
-            <Icon name="credit-card" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}>Payment</Text>
+            <Icon name="share" color="#000000" size={25}/>
+            <Text style={styles.menuItemText}>Refer</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={()=>{}}>
           <View style={styles.menuItem}>
-            <Icon name="share-outline" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}>Tell Your Friends</Text>
+            {/* <Icon name="information-circle" color="#000000" size={25}/> */}
+            <Icon name="information" color="#000000" size={25}></Icon>
+            <Text style={styles.menuItemText}>About</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        {/* <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color="#FF6347" size={25}/>
             <Text style={styles.menuItemText}>Support</Text>
@@ -110,7 +125,7 @@ const UserProfileScreen = () => {
             <Icon name="setting-outline" color="#FF6347" size={25}/>
             <Text style={styles.menuItemText}>Settings</Text>
           </View>
-        </TouchableRipple>
+        </TouchableRipple> */}
       </View>
     </SafeAreaView>
   );

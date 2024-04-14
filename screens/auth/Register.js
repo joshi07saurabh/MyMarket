@@ -7,6 +7,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const Register = () => {
   const [email, setEmail] = useState('');
+  const [mobile,setMobile] = useState('');
   const [shop, setShop] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -54,6 +55,7 @@ const Register = () => {
         <View  className='flex items-center justify-center w-full'>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={shop} placeholder="Shop Name" autoCapitalize="none" onChangeText={(text) => setShop(text)}></TextInput>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={email} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
+          <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={mobile} placeholder="Mobile Number" autoCapitalize="none" onChangeText={(text) => setMobile(text)}></TextInput>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={address} placeholder="Main Line Address" autoCapitalize="none" onChangeText={(text) => setAddress(text)}></TextInput>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={landmark} placeholder="Land Mark" autoCapitalize="none" onChangeText={(text) => setLandmark(text)}></TextInput>
           <View className='flex flex-row justify-between w-[85%]'>
