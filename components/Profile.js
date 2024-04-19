@@ -85,7 +85,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress }
         </View>
 }
       </View>
-      {/* <View className='w-full flex flex-row mx-8 justify-between items-center'>
+      <View className='w-full flex flex-row mx-8 justify-between items-center'>
       <TouchableOpacity onPress={editProfile} className='h-9 p-1.5  flex flex-row border-black border bg-black text-black rounded-md'>
           <Ionicons name="pencil-outline" color="white" size={18} className='text-bold'/>
 
@@ -95,7 +95,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress }
             <Icon name="eye" color="black" size={20} />
             <Text style={{ color: "black", marginLeft: 20 }} >123 Views</Text>
           </View>
-          </View> */}
+          </View>
     </SafeAreaView>
   )
 }

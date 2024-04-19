@@ -34,7 +34,7 @@ const ShopProfileForShop = ({ shopImage, name, contactDetails, userName = '', fu
   }
   
   const editProfile = ()=>{
-    navigation.navigate('EditProfileShop')
+    navigation.navigate('EditProfileUser')
   }
   const uploadpost = ()=>{
     navigation.navigate('PostFile')
