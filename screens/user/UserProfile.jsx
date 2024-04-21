@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, SafeAreaView, StyleSheet,TouchableOpacity} from 'react-native';
+import {View, SafeAreaView, StyleSheet,TouchableOpacity,Alert} from 'react-native';
 import {
   Avatar,
   Title,
@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "@react-navigation/native";
 import useGetUser from '../../hooks/useGetUser';
+import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
 
 // import Share from 'react-native-share';
 
@@ -38,6 +39,28 @@ const UserProfile = () => {
     navigation.navigate('EditProfileUser')
   }
   const profile = useGetUser();
+
+  const logout = ()=>{
+    Alert.alert('Logout','Are you sure you want to log out',
+    [{
+      text : 'Cancel',
+      onPress : () => console.log('Cancel Pressed'),
+      style : 'cancel'
+    },
+    {
+      text : 'OK',
+      onPress : () => {
+        setItemToAsyncStorage('isLoggedIn',false);
+    setItemToAsyncStorage('profile',{});
+    navigation.replace('Login')
+      }
+    }
+    ],
+    {cancelable : false}
+  
+  )
+    
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,6 +137,13 @@ const UserProfile = () => {
             {/* <Icon name="information-circle" color="#000000" size={25}/> */}
             <Icon name="information" color="#000000" size={25}></Icon>
             <Text style={styles.menuItemText}>About</Text>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple onPress={logout}>
+          <View style={styles.menuItem}>
+            {/* <Icon name="information-circle" color="#000000" size={25}/> */}
+            <Icon name="exit-to-app" color="#000000" size={25}></Icon>
+            <Text style={styles.menuItemText}>Logout</Text>
           </View>
         </TouchableRipple>
         {/* <TouchableRipple onPress={() => {}}>

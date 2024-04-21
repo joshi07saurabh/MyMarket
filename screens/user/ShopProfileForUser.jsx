@@ -13,7 +13,7 @@ const ShopProfileForUser = ({route}) => {
   return (
     <View className='flex flex-1 bg-white'>
       <Profile {...shopProfile}/>
-      <ShopProfileTabBar/>
+      <ShopProfileTabBar id={shopProfile?.id}/>
     </View>
   )
 }

@@ -2,7 +2,7 @@ import { View, TextInput, ActivityIndicator, Button, SafeAreaView ,Text, Touchab
 import React, { useState } from 'react'; 
 import { FIREBASE_AUTH, FIRESTORE_DB} from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { addDoc, collection } from 'firebase/firestore';
 import { addUser } from '../../redux/action';
 import { useDispatch } from 'react-redux';
@@ -45,7 +45,9 @@ const signUp = async () => {
   })
   const profile = await getUser(user.uid)
   dispatch(addUser(profile))
-  navigation.navigate('Main')
+  await setItemToAsyncStorage('isLoggedIn', true)
+  navigation.dispatch(
+    StackActions.replace('Main'))
   } catch (error) {
   console.log(error);
   alert("Sign Up failed!" + error.Message)

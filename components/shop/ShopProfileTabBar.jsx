@@ -13,7 +13,8 @@ const ShopVideos = 'ShopVideos';
 const ShopProducts = 'ShopProducts';
 const Tab = createMaterialTopTabNavigator();
 
-const ShopProfileTabBar = () => {
+const ShopProfileTabBar = ({id}) => {
+  console.log('id',id)
   return (
       <Tab.Navigator
         initialRouteName = {ShopProducts}
@@ -38,9 +39,9 @@ const ShopProfileTabBar = () => {
         })}
 >
 
-        <Tab.Screen name={ShopPosts} options={{headerShown: false}} component={ShopProfilePostTab}></Tab.Screen>
-        <Tab.Screen name={ShopVideos} options={{headerShown: false}} component={ShopProfileVideoTab}></Tab.Screen>
-        <Tab.Screen name={ShopProducts} options={{headerShown: false}} component={ShopProfileProductTab}></Tab.Screen>
+        <Tab.Screen name={ShopPosts} options={{headerShown: false}} component={()=><ShopProfilePostTab id={id}/>}></Tab.Screen>
+        <Tab.Screen name={ShopVideos} options={{headerShown: false}} component={()=><ShopProfileVideoTab id={id}/>}></Tab.Screen>
+        <Tab.Screen name={ShopProducts} options={{headerShown: false}} component={()=><ShopProfileProductTab id={id}/>}></Tab.Screen>
       </Tab.Navigator>
     
   )

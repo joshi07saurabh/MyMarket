@@ -2,10 +2,13 @@ import { View, TextInput, ActivityIndicator, Button, SafeAreaView ,Text, Touchab
 import React, { useState } from 'react'; 
 import { FIREBASE_AUTH} from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { addUser } from '../../redux/action';
 import { useDispatch } from 'react-redux';
 import getUser from '../../database/getUserProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
+import { getItemFromAsyncStorage } from '../../utils/getItemAsyncStorage';
 const Login = () => {
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
@@ -15,6 +18,8 @@ const auth = FIREBASE_AUTH;
 const navigation = useNavigation()
 const dispatch = useDispatch()
 
+
+
 const signIn = async () => {
   setLoading (true);
   try {
@@ -22,7 +27,14 @@ const signIn = async () => {
   const user = getAuth().currentUser
   const profile = await getUser(user.uid)
   dispatch(addUser(profile))
-  navigation.navigate('Main')
+  await setItemToAsyncStorage('isLoggedIn', true)
+  await setItemToAsyncStorage('profile',profile)
+  const value = await getItemFromAsyncStorage('isLoggedIn')
+  console.log(value)
+
+  navigation.dispatch(
+    StackActions.replace('Main'))
+  // navigation.navigate('Main')
   } catch (error) {
   console.log(error);
   alert("Sign In failed!" + error.Message)

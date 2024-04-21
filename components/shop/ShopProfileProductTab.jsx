@@ -1,24 +1,32 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ListComponent from '../list/ListComponent'
+import { getAllProduct } from '../../database/getAllProduct'
 
-const ShopProfileProductTab = () => {
-  const productList = [{
-    imageUrl: 'https://m.media-amazon.com/images/I/41lUoCWmsOL._AC_UF420%2C420_FMjpg_.jpg',
-    productName: 'Crompton Dyna Ray 9W Round B22 LED Cool Day Light Pack of 10',
-    price: '40',
-  },
-  {
-    imageUrl: 'https://m.media-amazon.com/images/I/61Ib-0m2nnL._AC_UL480_QL65_.jpg',
-    productName: 'Eveready 12W B22D Emergency Inverter LED Bulb| Cool Day Light (6500K) | Energy Efficient | 4 Hour Battery Backup | Li-on Battery Inside',
-    price: '80',
-  },
-  {
-    imageUrl: 'https://m.media-amazon.com/images/I/71AQFEqJRbL._AC_UL480_QL65_.jpg',
-    productName: 'Halonix Radar 10W B22 Cool day white Motion Sensor Led Bulb, Auto on-Auto off, Pack of 1, White',
-    price: '100',
+const ShopProfileProductTab = ({id}) => {
+  const [productList,setProductList] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(()=>{
+    fetchProducts()
+  },[])
+
+  const fetchProducts = async ()=>{
+    setIsLoading(true);
+    const product=await getAllProduct(id)
+     setProductList(product)
+     setIsLoading(false);
   }
-]
+if(isLoading){
+  return <View className='flex flex-1 justify-center items-center bg-white'>
+  <Text className='text-xl text-gray-300'>Loading...</Text>
+</View>
+}
+if(productList.length  <=0){
+  return     <View className='flex flex-1 justify-center items-center bg-white'>
+  <Text className='text-xl text-gray-300'>No Products Available</Text>
+</View>
+}
   return (
     <View className='flex flex-1 h-full bg-white'>
       

@@ -12,10 +12,12 @@ import UserFavouriteShop from '../screens/FavouriteShops';
 import ShopProfileForShop from '../screens/shop/ShopFullProfile';
 import useGetUser from '../hooks/useGetUser';
 import UserProfile from '../screens/user/UserProfile';
+import ShopUploadActivity from '../screens/shop/ShopUploadPostActivity';
 const homeName = 'Home';
 const search = 'Search';
 // const profileName = 'UserProfile';
 const profileName = 'ShopProfileForShop';
+const addPost = 'AddPost';
 const favourite= 'Favourite Shop';
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +38,8 @@ const BottomBar = () => {
               iconName = focused ? 'search' : 'search-outline'
             }else if(rn === profileName){
               iconName = focused ? 'person' : 'person-outline'
+            }else if(rn === addPost){
+              iconName = focused ? 'add-circle' : 'add-circle-outline'
             }else if (rn === favourite){
               iconName = focused ? 'heart' : 'heart-outline'
             }
@@ -52,7 +56,13 @@ const BottomBar = () => {
 
         <Tab.Screen name={homeName} options={{headerShown: false}} component={HomeScreen}></Tab.Screen>
         <Tab.Screen name={search} options={{headerShown: false}} component={SeachScreen}></Tab.Screen>
-        <Tab.Screen name={favourite} options={{headerShown: false}} component={UserFavouriteShop}></Tab.Screen>
+        {
+          !profile?.isUser &&
+          //  (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfileScreen}></Tab.Screen>):
+           (<Tab.Screen name={addPost} options={{headerShown: false}} component={ShopUploadActivity}></Tab.Screen>)
+
+        }
+        {/* <Tab.Screen name={favourite} options={{headerShown: false}} component={UserFavouriteShop}></Tab.Screen> */}
         {
           profile?.isUser ? 
           //  (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfileScreen}></Tab.Screen>):

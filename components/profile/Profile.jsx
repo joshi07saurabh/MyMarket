@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Linking } from 'react-native'
 import Badge from '../badge/Badge';
 import AppToggle from '../app-toggle/AppToggle';
@@ -17,9 +17,14 @@ import { useNavigation } from "@react-navigation/native";
 import useGetUser from '../../hooks/useGetUser';
 
 
-const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress}) => {
+const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id}) => {
   const [isShopOpen,setIsShopOpen] = useState(true)
   const currentLoggedUser = useGetUser()
+  const [isSelfOwner,setIsSelfOwner] = useState(false)
+  useEffect(()=>{
+    console.log('idddd',currentLoggedUser?.uid, id)
+    setIsSelfOwner(currentLoggedUser?.uid === id)
+  },[currentLoggedUser,id])
   const navigation = useNavigation()
   const goToCall = () => {
     Linking.openURL(`tel:${contactDetails.contact}`)
@@ -56,7 +61,8 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress})
             <Caption style={styles.caption}>{userName}</Caption>
             <View className='w-[75%] flex flex-row justify-between'>
               <Badge color={isShopOpen?'bg-green-500':'bg-red-400'} status={isShopOpen?'Open':'Closed'} />
-             {!currentLoggedUser?.isUser && <AppToggle onToggle={onToggle} isShopOpen={isShopOpen}/>}
+             {
+             isSelfOwner && <AppToggle onToggle={onToggle} isShopOpen={isShopOpen}/>}
             </View>
           </View>
         </View>
@@ -75,13 +81,13 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress})
             <Icon name="email" color="#777777" size={20} />
             <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails?.email}</Text>
           </View>
-          {!currentLoggedUser?.isUser &&   <View style={styles.row} className='mr-14 mt-3'>
+          {isSelfOwner &&   <View style={styles.row} className='mr-14 mt-3'>
             <Icon name="eye" color="#777777" size={20} />
             <Text style={{ color: "#777777", marginLeft: 20 }} >123 Views</Text>
           </View>}
         </View>
         
-        {currentLoggedUser?.isUser &&   <View className='mr-5 self-end mb-8'>
+        {!isSelfOwner &&   <View className='mr-5 self-end mb-8'>
           <TouchableOpacity onPress={goToCall} className='w-full bg-gray-800 p-3 text-white  rounded-full mb-2 flex flex-row'>
             <Ionicons name="call-outline" color="#ffffff" size={16} />
             {/* <Text className='text-white text-xs text-center mx-2'>Call</Text> */}
@@ -93,7 +99,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress})
         </View>
 }
       </View>
-      {!currentLoggedUser?.isUser && <View className='w-full flex flex-row mx-8 justify-between items-center'>
+      {isSelfOwner && <View className='w-full flex flex-row mx-8 justify-between items-center'>
       <TouchableOpacity onPress={editProfile} className='h-9 p-1.5  flex flex-row border-black border bg-black text-black rounded-md'>
           <Ionicons name="pencil-outline" color="white" size={18} className='text-bold'/>
 

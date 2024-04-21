@@ -3,7 +3,6 @@ import { FIRESTORE_DB } from "../FirebaseConfig"
 
 const getUser =async (id)=>{
     try{
-    console.log('muk');
     let profileData = null
     const userProfile =  await getDocs(collection(FIRESTORE_DB,'userProfile'))
     userProfile.forEach((doc)=> {
@@ -17,7 +16,6 @@ const getUser =async (id)=>{
         profileData = doc.data()
       }  
     })
-    console.log('arta',profileData);
     return profileData
     }catch(err){
         console.log(err)
