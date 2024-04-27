@@ -18,6 +18,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import ShopProfileForUser from './screens/user/ShopProfileForUser';
 import PostDetail from './screens/shop/PostDetail';
+import ShopEditProfile from './screens/shop/ShopEditProfile';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name="ShopProfileForUser" component={ShopProfileForUser} />
         <Stack.Screen options={{headerShown: false}} name="PostFile" component={PostFile} />
         <Stack.Screen options={{headerShown: false}} name="PostDetail" component={PostDetail} />
+        <Stack.Screen options={{headerShown: false}} name="ShopEditProfile" component={ShopEditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

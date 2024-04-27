@@ -36,7 +36,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
     setIsShopOpen(!isShopOpen)
   }
   const editProfile = ()=>{
-    navigation.navigate('EditProfileUser')
+    navigation.navigate('ShopEditProfile')
   }
   const uploadpost = ()=>{
     navigation.navigate('PostFile')
@@ -105,11 +105,11 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
 
             <Text className='text-white text-semibold text-center mx-2'>Edit Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={uploadpost} className='h-9 p-1.5 flex flex-row border-black border bg-black text-black rounded-md mr-16'>
+          {/* <TouchableOpacity onPress={uploadpost} className='h-9 p-1.5 flex flex-row border-black border bg-black text-black rounded-md mr-16'>
           <Ionicons name="cloud-upload-outline" color="white" size={18} className='text-bold'/>
 
             <Text className='text-white text-semibold text-center mx-2'>Upload Profile</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           </View>
 }

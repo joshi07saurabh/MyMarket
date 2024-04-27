@@ -14,11 +14,11 @@ import { Linking } from 'react-native'
 import Badge from '../../components/badge/Badge';
 import AppToggle from '../../components/app-toggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
-import ShopProfile from '../ShopProfile';
+//import ShopProfile from '../../screens/ShopProfile'
 import ShopProfileTabBar from '../../components/shop/ShopProfileTabBar';
 
 
-const ShopFullProfile = ({ shopImage, name, contactDetails, userName = '', fullAddress }) => {
+const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', fullAddress }) => {
   const [isShopOpen,setIsShopOpen] = useState(true)
   const [isCustomer,setIsCustomer] = useState(false)
   
@@ -34,7 +34,7 @@ const ShopFullProfile = ({ shopImage, name, contactDetails, userName = '', fullA
   }
   
   const editProfile = ()=>{
-    navigation.navigate('EditProfileUser')
+    navigation.navigate('ShopEditProfile')
   }
   return (
     <SafeAreaView className='bg-white'>
@@ -52,7 +52,7 @@ const ShopFullProfile = ({ shopImage, name, contactDetails, userName = '', fullA
               marginBottom: 5,
               width:290
               
-            }]}>{name}</Title>
+            }]}>{shopName}</Title>
             <Caption style={styles.caption}>{userName}</Caption>
             <View className='w-[80%] flex flex-row justify-between'>
               <Badge color={isShopOpen?'bg-green-500':'bg-red-400'} status={isShopOpen?'Open':'Closed'} />

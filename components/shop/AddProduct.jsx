@@ -192,6 +192,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     alignItems: 'center',
     marginTop: 10,
+    width:300,
+    marginLeft : 30
     
     
   },
@@ -256,6 +258,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#f2f2f2',
     paddingBottom: 5,
+    marginLeft: 5,
   },
   actionError: {
     flexDirection: 'row',

@@ -16,7 +16,7 @@ import ShopUploadActivity from '../screens/shop/ShopUploadPostActivity';
 const homeName = 'Home';
 const search = 'Search';
 // const profileName = 'UserProfile';
-const profileName = 'ShopProfileForShop';
+const profileName = 'Profile';
 const addPost = 'AddPost';
 const favourite= 'Favourite Shop';
 const Tab = createBottomTabNavigator();

@@ -1,50 +1,45 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Alert } from 'react-native';
+import { View, Text, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 const AddPost = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleChooseImage = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const pickImage = async () => {
+    try {
+      const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        
+      });
 
-    if (permissionResult.granted === false) {
-      Alert.alert('Permission Denied', 'Permission to access camera roll is required!');
-      return;
+      if (!cancelled) {
+        setSelectedImage(uri);
+        console.log(uri)
+      }
+    } catch (error) {
+      console.log('Error picking image:', error);
     }
-
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-
-    if (pickerResult.cancelled === true) {
-      return;
-    }
-
-    setSelectedImage({ uri: pickerResult.uri });
   };
 
-  const handleUploadImage = async () => {
-    if (!selectedImage) {
-      Alert.alert('Error', 'Please select an image first.');
-      return;
-    }
-
-    // Replace 'YOUR_UPLOAD_ENDPOINT_HERE' with your actual upload endpoint URL.
-    // You can use fetch or any other library for uploading the image.
-
-    Alert.alert('Success', 'Image uploaded successfully.');
+  const uploadImage = () => {
+    // Implement image upload logic here
+    // You can use selectedImage URI to upload the image
+    console.log("Uploading image:", selectedImage);
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      {selectedImage && (
-        <Image
-          source={{ uri: selectedImage.uri }}
-          style={{ width: 200, height: 200, marginBottom: 20 }}
-        />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',  marginTop: 30 }}>
+      {selectedImage ? (
+        <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200, marginBottom: 20 }} />
+      ) : (
+        <View style={{ width: 200, height: 200, backgroundColor: 'lightgray', marginBottom: 20 }} />
       )}
-      <Button title="Choose Image" onPress={handleChooseImage} />
-      {selectedImage && <View style={{ marginVertical: 10 }} />}
-      <Button title="Upload Image" onPress={handleUploadImage} />
+
+      <Button title="Choose Image" onPress={pickImage} />
+
+      <View style={{ marginTop: 20 }}>
+        <Button title="Upload Image" onPress={uploadImage} disabled={!selectedImage} />
+      </View>
     </View>
   );
 };
