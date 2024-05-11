@@ -16,11 +16,13 @@ import AppToggle from '../../components/app-toggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
 //import ShopProfile from '../../screens/ShopProfile'
 import ShopProfileTabBar from '../../components/shop/ShopProfileTabBar';
+import useGetUser from '../../hooks/useGetUser';
 
 
 const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', fullAddress }) => {
   const [isShopOpen,setIsShopOpen] = useState(true)
   const [isCustomer,setIsCustomer] = useState(false)
+  const profile = useGetUser()
   
   // const goToCall = () => {
   //   Linking.openURL(`tel:${contactDetails.contact}`)
@@ -108,7 +110,7 @@ const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', f
           </TouchableOpacity>
           </View>
           </View>
-          <ShopProfileTabBar></ShopProfileTabBar>
+          <ShopProfileTabBar id={profile?.uid}></ShopProfileTabBar>
     </SafeAreaView>
   )
 }

@@ -8,9 +8,16 @@ const ShopProfilePostTab = ({id}) => {
   const [postLinks, setPostLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(()=>{
     fetchPosts()
+  },[])
+  useEffect(()=>{
+  const unsubscribe =  navigation.addListener('refreshPostDetails', ()=>{
+    console.log('Refreshing post details')
+      fetchPosts()
+    })
+
+    return unsubscribe
   },[])
 
   const fetchPosts = async ()=>{
@@ -19,8 +26,9 @@ const ShopProfilePostTab = ({id}) => {
      setPostLinks(post)
      setIsLoading(false);
   }
-  const goToImage = (postLink) => {
-    navigation.navigate("PostDetail", { image: postLink });
+  const goToImage = (postLink,postId) => {
+    console.log('iddd',id)
+    navigation.navigate("PostDetail", { image: postLink, id: postId,postOwnerId: id });
   };
 
   if(isLoading){
@@ -38,9 +46,9 @@ const ShopProfilePostTab = ({id}) => {
       <View className="flex flex-row flex-wrap bg-white h-full">
         {postLinks?.map((postLink) => (
             <View className="w-1/3 h-40 aspect-square border border-white">
-              <TouchableOpacity onPress={()=>goToImage(postLink)}>
+              <TouchableOpacity onPress={()=>goToImage(postLink.imageURL,postLink.uid,id)}>
               <Image
-                source={{ uri: postLink }}
+                source={{ uri: postLink.imageURL }}
                 className="w-full h-full"
               ></Image>
               </TouchableOpacity>

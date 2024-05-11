@@ -37,7 +37,7 @@ const ShopProfile = () => {
   return (
     <View className='flex flex-1 bg-white'>
       <Profile {...shopProfile}/>
-      <ShopProfileTabBar/>
+      <ShopProfileTabBar id={profile?.uid}/>
     </View>
   )
 }

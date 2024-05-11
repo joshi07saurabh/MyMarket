@@ -1,10 +1,11 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import {
   Avatar,
   Title,
   Caption,
   Text,
   TouchableRipple,
+  
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +16,8 @@ import Badge from '../badge/Badge';
 import AppToggle from '../app-toggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
 import useGetUser from '../../hooks/useGetUser';
+import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
+
 
 
 const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id}) => {
@@ -41,6 +44,27 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
   const uploadpost = ()=>{
     navigation.navigate('PostFile')
   }
+  const logout = ()=>{
+    Alert.alert('Logout','Are you sure you want to log out',
+    [{
+      text : 'Cancel',
+      onPress : () => console.log('Cancel Pressed'),
+      style : 'cancel'
+    },
+    {
+      text : 'OK',
+      onPress : () => {
+        setItemToAsyncStorage('isLoggedIn',false);
+    setItemToAsyncStorage('profile',{});
+    navigation.replace('Login')
+      }
+    }
+    ],
+    {cancelable : false}
+  
+  )
+    
+  }
   return (
     <SafeAreaView className='bg-white'>
       <View style={styles.userInfoSection}>
@@ -55,7 +79,10 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
             <Title style={[styles.title, {
               marginTop: 15,
               marginBottom: 5,
-              width:290
+              width:200,
+              
+              
+              
               
             }]}>{name}</Title>
             <Caption style={styles.caption}>{userName}</Caption>
@@ -105,11 +132,11 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
 
             <Text className='text-white text-semibold text-center mx-2'>Edit Profile</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={uploadpost} className='h-9 p-1.5 flex flex-row border-black border bg-black text-black rounded-md mr-16'>
-          <Ionicons name="cloud-upload-outline" color="white" size={18} className='text-bold'/>
+          <TouchableOpacity onPress={logout} className='h-9 p-1.5 flex flex-row border-black border bg-black text-black rounded-md mr-16'>
+          <Icon name="exit-to-app" color="white" size={18} className='text-bold'/>
 
-            <Text className='text-white text-semibold text-center mx-2'>Upload Profile</Text>
-          </TouchableOpacity> */}
+            <Text className='text-white text-semibold text-center mx-2 w-14'>Logout</Text>
+          </TouchableOpacity>
 
           </View>
 }
@@ -131,6 +158,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    
   },
   caption: {
     fontSize: 14,

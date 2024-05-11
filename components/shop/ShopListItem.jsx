@@ -1,6 +1,7 @@
 import { View, Text, Image,SafeAreaView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
+import { firstEveryWord } from '../../utils/textTransform'
 
 const ShopListItem = (profile) => {
   const {name,address,shopImage,city,state,category} = profile
@@ -18,7 +19,7 @@ const ShopListItem = (profile) => {
             <Image source={{uri: shopImage}} className="rounded-md w-32 h-32 m-1"/>
         </SafeAreaView>
       <SafeAreaView className="flex flex-1 pt-1 px-3">
-        <Text className="text-xl font-semibold">{name}</Text>
+        <Text className="text-xl font-semibold">{firstEveryWord(name)}</Text>
         <Text className="font-semibold">{category}</Text>
         <Text className="text-[10px] text-gray-600 capitalize">{address}</Text>
         <Text className="text-[10px] text-gray-600 capitalize">{city}</Text>

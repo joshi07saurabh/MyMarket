@@ -7,6 +7,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { addUser } from '../../redux/action';
 import { useDispatch } from 'react-redux';
 import getUser from '../../database/getUserProfile';
+import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
 
 const UserRegister = () => {
 const [name, setName] = useState('');
@@ -18,6 +19,16 @@ const auth = FIREBASE_AUTH;
 
 const navigation = useNavigation()
 
+const validateEmail = (email) => {
+  // Basic email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+const validateName = (shop) => {
+  // Name should not contain special characters
+  const nameRegex = /^[a-zA-Z\s]*$/;
+  return nameRegex.test(shop);
+};
 const signIn = async () => {
   setLoading (true);
   try {
@@ -35,6 +46,22 @@ const signUp = async () => {
   setLoading (true);
   const dispatch = useDispatch()
   try {
+    if (password!== confirmpassword) {
+      alert("Passwords do not match")
+      return;
+    }
+    if (!validateEmail(email)) {
+      alert('Invalid email address');
+      return;
+    }
+    if (!validateName(name)) {
+      alert('Invalid name');
+      return;
+    }
+    if(!email || !name || !password){
+      alert('Please fill all fields');
+      return;
+    }
   const response = await createUserWithEmailAndPassword(auth,email, password);
  const user = getAuth().currentUser
   const docRef = await addDoc(collection(FIRESTORE_DB,'userProfile'),{

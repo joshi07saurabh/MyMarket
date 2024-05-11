@@ -8,7 +8,9 @@ const ShopUploadPhoto = () => {
   const [loading, setLoading] = useState(false);
 
   const selectPhoto = () => {
+    console.log('testih')
     ImagePicker.showImagePicker({ title: 'Select Photo' }, (response) => {
+      console.log(response,'hhhh');
       if (!response.didCancel) {
         setSelectedPhoto(response);
       }

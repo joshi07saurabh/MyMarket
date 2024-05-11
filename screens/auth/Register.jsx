@@ -8,6 +8,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { addUser } from '../../redux/action';
 import { useDispatch } from 'react-redux';
 import getUser from '../../database/getUserProfile';
+import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -25,6 +26,27 @@ const Register = () => {
   const dispatch = useDispatch()
 
   const navigation = useNavigation()
+  const validateEmail = (email) => {
+    // Basic email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const validateShopName = (shop) => {
+    // Name should not contain special characters
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    return nameRegex.test(shop);
+  };
+  const validateCity = (city) => {
+    // Name should not contain special characters
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    return nameRegex.test(city);
+  };
+  const validateState = (state) => {
+    // Name should not contain special characters
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    return nameRegex.test(state);
+  };
+
 
   const signIn = async () => {
     setLoading(true);
@@ -42,6 +64,42 @@ const Register = () => {
   const signUp = async () => {
     setLoading(true);
     try {
+      if (!email || !mobile || !address || !password || !city || !state || !confirmpassword || !pin || !shop){
+        alert("All fields are required")
+        return;
+      }
+      if (password!== confirmpassword) {
+        alert("Passwords do not match")
+        return;
+      }
+      if (!validateEmail(email)) {
+        alert('Invalid email address');
+        return;
+      }
+      if(mobile.length<10){
+        alert('Invalid mobile number');
+        return;
+      }
+      if(pin.length<6){
+        alert('Invalid PIN');
+        return;
+      }
+      if(password.length<8){
+        alert('Password should be atleast 8 characters');
+        return;
+      }
+      if (!validateShopName(shop)) {
+        alert('Shop Name should not contain special characters or numbers');
+        return;
+      }
+      if (!validateCity(city)) {
+        alert('City Name should not contain special characters or numbers');
+        return;
+      }
+      if (!validateCity(state)) {
+        alert('State Name should not contain special characters or numbers');
+        return;
+      }
       const response = await createUserWithEmailAndPassword(auth, email, password);
       const user = getAuth().currentUser
       const docRef = await addDoc(collection(FIRESTORE_DB,'shopProfile'),{
@@ -77,8 +135,8 @@ const Register = () => {
       <ScrollView>
         <View  className='flex items-center justify-center w-full'>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={shop} placeholder="Shop Name" autoCapitalize="none" onChangeText={(text) => setShop(text)}></TextInput>
-          <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={email} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
-          <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={mobile} placeholder="Mobile Number" autoCapitalize="none" onChangeText={(text) => setMobile(text)}></TextInput>
+          <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={email} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)} keyboardType="email-address"></TextInput>
+          <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' inputMode='numeric' value={mobile} placeholder="Mobile Number" autoCapitalize="none" onChangeText={(text) => setMobile(text)}></TextInput>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={address} placeholder="Main Line Address" autoCapitalize="none" onChangeText={(text) => setAddress(text)}></TextInput>
           <TextInput className='border rounded-xl  w-80 mb-6 px-5 py-3' value={landmark} placeholder="Land Mark" autoCapitalize="none" onChangeText={(text) => setLandmark(text)}></TextInput>
           <View className='flex flex-row justify-between w-[85%]'>

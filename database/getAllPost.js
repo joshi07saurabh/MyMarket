@@ -6,8 +6,8 @@ export const getPostImage =async (id)=>{
     const list = []
     const post =  await getDocs(collection(FIRESTORE_DB,'postTable'))
     post.forEach((doc)=> {
-        if(doc.data().uid ===id){
-            list.push(doc.data().imageURL)
+        if(doc.data().uid === id){
+            list.push({uid:doc.id,imageURL:doc.data().imageURL})
         }
     }) 
     return list || []
