@@ -63,13 +63,13 @@ const UserProfile = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} className='bg-white'>
 
       <View style={styles.userInfoSection}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Avatar.Image 
             source={{
-              uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+              uri: profile?.profileImage || 'https://static.vecteezy.com/system/resources/previews/005/618/050/original/muzzle-dog-in-the-form-square-icon-children-avatar-cute-animal-in-cartoon-style-vector.jpg',
             }}
             size={80}
           />
@@ -84,13 +84,13 @@ const UserProfile = () => {
       </View>
 
       <View style={styles.userInfoSection}>
-        { profile?.address && <View style={styles.row}>
+        { profile?.city && <View style={styles.row}>
           <Icon name="map-marker-radius" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>{profile?.address}</Text>
+          <Text style={{color:"#777777", marginLeft: 20}}>{profile?.city}</Text>
         </View>}
-        { profile?.mobile && <View style={styles.row}>
+        { profile?.phone && <View style={styles.row}>
           <Icon name="phone" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>{profile?.mobile}</Text>
+          <Text style={{color:"#777777", marginLeft: 20}}>{profile?.phone}</Text>
         </View>}
         <View style={styles.row}>
           <Icon name="email" color="#777777" size={20}/>

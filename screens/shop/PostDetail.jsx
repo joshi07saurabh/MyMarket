@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Image, StyleSheet, Text, Alert } from "react-native";
 import { TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -7,15 +7,18 @@ import { collection } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { deleteSinglePost } from "../../database/deletePost";
 import useGetUser from "../../hooks/useGetUser";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const PostDetail = ({ route }) => {
   const { image, id,postOwnerId } = route.params;
+  const [isLoading,setIsLoading] = useState(false);
   const navigation = useNavigation();
   const currentLoggedUser = useGetUser();
   console.log('user',currentLoggedUser?.uid);
   const deletePost = () => {
+    
     Alert.alert(
-      "Logout",
+      "Delete Post",
       "Are you sure you want to delete this Post?",
       [
         {
@@ -27,10 +30,13 @@ const PostDetail = ({ route }) => {
           text: "OK",
           onPress: async () => {
             try {
+              setIsLoading(true);
               await deleteSinglePost(id);
               // navigation.emit('refreshPostDetails')
               // navigation.navigate('ShopProfileForUser')r
               // navigation.emit('refreshPostDetails')
+              navigation.goBack({message:'refresh'})
+              setIsLoading(false);
             } catch (e) {
               console.log(e);
             }
@@ -43,6 +49,11 @@ const PostDetail = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Spinner
+          visible={isLoading}
+          textContent={'Deleting...'}
+          textStyle={{color: '#FFF'}}
+        />
       <Image source={{ uri: image }} style={styles.image} />
       {(currentLoggedUser?.uid === postOwnerId) && (
         <TouchableRipple onPress={deletePost}>

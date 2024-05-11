@@ -68,7 +68,8 @@ const signUp = async () => {
     name: name,
     email: email,
     isUser: true,
-    uid: user.uid
+    uid: user.uid,
+    profileImage: 'https://static.vecteezy.com/system/resources/previews/005/618/050/original/muzzle-dog-in-the-form-square-icon-children-avatar-cute-animal-in-cartoon-style-vector.jpg'
   })
   const profile = await getUser(user.uid)
   dispatch(addUser(profile))

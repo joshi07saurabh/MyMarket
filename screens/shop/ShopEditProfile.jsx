@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,144 +6,123 @@ import {
   ImageBackground,
   TextInput,
   StyleSheet,
-} from 'react-native';
+  Image,
+  ScrollView,
+} from "react-native";
 
-// import { ReactNativeFirebase } from "@react-native-firebase/app";
+import { ActivityIndicator, useTheme } from "react-native-paper";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import {useTheme} from 'react-native-paper';
-
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
-
-//  import BottomSheet from 'reanimated-bottom-sheet';
-//  import Animated from 'react-native-reanimated';
-
-//  import ImagePicker from 'react-native-image-crop-picker';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Feather from "react-native-vector-icons/Feather";
+import { SafeAreaView } from "react-native-safe-area-context";
+import useGetUser from "../../hooks/useGetUser";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { getAuth, updateProfile } from "firebase/auth";
+import getUser from "../../database/getUserProfile";
+import { addUser } from "../../redux/action";
+import { useDispatch } from "react-redux";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const ShopEditProfile = () => {
+  const { colors } = useTheme();
+  const profile = useGetUser();
 
-  const [image, setImage] = useState('https:api.adorable.io/avatars/80/abott@adorable.png');
-  const {colors} = useTheme();
+  console.log(profile);
 
- //  const takePhotoFromCamera = () => {
- //    ImagePicker.openCamera({
- //      compressImageMaxWidth: 300,
- //      compressImageMaxHeight: 300,
- //      cropping: true,
- //      compressImageQuality: 0.7
- //    }).then(image => {
- //      console.log(image);
- //      setImage(image.path);
- //      this.bs.current.snapTo(1);
- //    });
- //  }
+  const [name, setName] = useState(profile?.name);
+  const [city, setCity] = useState(profile?.city || "");
+  const [phone, setPhone] = useState(profile?.phone || "");
+  const [state,setState] = useState(profile?.state || "");
+  const [address, setAddress] = useState(profile?.address || "");
+  const [landmark, setLandmark] = useState(profile?.landmarkAdd || "");
+  const [pinAdd, setPinAdd] = useState(profile?.pinAdd || "");
+  const [error, setError] = useState("");
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [ isLoading,setIsLoading] = useState(false)
 
- //  const choosePhotoFromLibrary = () => {
- //    ImagePicker.openPicker({
- //      width: 300,
- //      height: 300,
- //      cropping: true,
- //      compressImageQuality: 0.7
- //    }).then(image => {
- //      console.log(image);
- //      setImage(image.path);
- //      this.bs.current.snapTo(1);
- //    });
- //  }
+  const updateUser = async () => {
+   
+    try {
+      
+      setIsLoading(true)
+      setError("");
+      const userProfileRef = collection(FIRESTORE_DB, "shopProfile");
+      const querySnapshot = await getDocs(
+        query(userProfileRef, where("uid", "==", profile.uid))
+      );
 
-  renderInner = () => (
-    <View style={styles.panel}>
-      <View style={{alignItems: 'center'}}>
-        <Text style={styles.panelTitle}>Upload Photo</Text>
-        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-      </View>
-      <TouchableOpacity style={styles.panelButton} onPress={()=>{}}>
-        <Text style={styles.panelButtonTitle}>Take Photo</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.panelButton} onPress={()=>{}}>
-        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.panelButton}
-        onPress={()=>{}}>
-        <Text style={styles.panelButtonTitle}>Cancel</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  renderHeader = () => (
-    <View style={styles.header}>
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle} />
-      </View>
-    </View>
-  );
-
- //  bs = React.createRef();
- //  fall = new Animated.Value(1);
+      // Check if there is a matching document
+      if (!querySnapshot.empty) {
+        // Assuming there's only one document with the given name, you can access it directly
+        console.log(querySnapshot.docs[0]);
+        const userDocRef = querySnapshot.docs[0].ref;
+        const updatedProfile = {
+          ...profile,
+          shopName: name || profile.shopName,
+          cityAdd: city || profile.cityAdd,
+          mobileNumber: phone || profile.mobileNumber,
+          stateAdd: state || profile.stateAdd,
+          mainAdd: address || profile.mainAdd,
+          landmarkAdd : landmark || profile.landmarkAdd,
+          pinAdd : pinAdd || profile.pinAdd
+        }
+        await updateDoc(userDocRef, updatedProfile);
+        dispatch(
+          addUser(updatedProfile)
+        );
+        navigation.goBack(null);
+      } 
+      
+      else {
+        setError("User does not exists!");
+      }
+      // navigation.goBack(null)
+    } catch (e) {
+      console.log(e);
+      setError("Something went wrong!");
+    }
+    finally{
+      setIsLoading(false)
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      {/* <BottomSheet
-        ref={this.bs}
-        snapPoints={[330, 0]}
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader}
-        initialSnap={1}
-        callbackNode={this.fall}
-        enabledGestureInteraction={true}
-      />
-      <Animated.View style={{margin: 20,
-        opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-    }}> */}
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => {}}>
-            <View
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ImageBackground
-                source={{
-                  uri: image,
-                }}
-                style={{height: 100, width: 100}}
-                imageStyle={{borderRadius: 15}}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="camera"
-                    size={35}
-                    color="#fff"
-                    style={{
-                      opacity: 0.7,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: '#fff',
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
-              </ImageBackground>
-            </View>
-          </TouchableOpacity>
-          <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
-            ShopName
-          </Text>
+    <>
+    <Spinner
+          visible={isLoading}
+          textContent={'Updating...'}
+          textStyle={{color: '#FFF'}}
+        />
+    <SafeAreaView style={styles.container} className="bg-white">
+      <KeyboardAwareScrollView>
+      <View className="w-full flex flex-row justify-center mt-10 mb-4">
+        <View className="rounded-full overflow-hidden w-20 h-20">
+          <Image
+            source={{
+              uri: "https://media.wired.com/photos/59d6bc37b9dfe230914d0dd6/master/w_1600%2Cc_limit/fox.gif",
+            }}
+            className="w-20 h-20 border"
+          />
         </View>
-
-        <View style={styles.action}>
-          <FontAwesome name="shopping-cart" color={colors.text} size={20} />
+      </View>
+      <View className="mx-4">
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+          <FontAwesome name="user" color={colors.text} size={20} />
           <TextInput
+            value={name}
+            onChangeText={(text) => setName(text)}
             placeholder="Shop Name"
             placeholderTextColor="#666666"
             autoCorrect={false}
@@ -155,24 +134,12 @@ const ShopEditProfile = () => {
             ]}
           />
         </View>
-        {/* <View style={styles.action}>
-          <FontAwesome name="envelope-o" color={colors.text} size={20} />
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View> */}
-        <View style={styles.action}>
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
           <FontAwesome name="phone" color={colors.text} size={20} />
           <TextInput
-            placeholder="Mobile Number"
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+            placeholder="Phone"
             placeholderTextColor="#666666"
             keyboardType="number-pad"
             autoCorrect={false}
@@ -184,24 +151,11 @@ const ShopEditProfile = () => {
             ]}
           />
         </View>
-        {/* <View style={styles.action}>
-          <FontAwesome name="envelope-o" color={colors.text} size={20} />
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+          <FontAwesome name="address-card" color={colors.text} size={20} />
           <TextInput
-            placeholder="Email"
-            placeholderTextColor="#666666"
-            keyboardType="email-address"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View> */}
-        <View style={styles.action}>
-          <FontAwesome name="address-book-o" color={colors.text} size={20} />
-          <TextInput
+            value={address}
+            onChangeText={(text) => setAddress(text)}
             placeholder="Main Line Address"
             placeholderTextColor="#666666"
             autoCorrect={false}
@@ -213,9 +167,43 @@ const ShopEditProfile = () => {
             ]}
           />
         </View>
-        <View style={styles.action}>
-          <FontAwesome name="map-marker" color={colors.text} size={20} />
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+          <Icon name="map-legend" color={colors.text} size={20} />
           <TextInput
+            value={landmark}
+            onChangeText={(text) => setLandmark(text)}
+            placeholder="Landmark"
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            style={[
+              styles.textInput,
+              {
+                color: colors.text,
+              },
+            ]}
+          />
+        </View>
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+          <Icon name="map-marker-radius" color={colors.text} size={20} />
+          <TextInput
+            value={pinAdd}
+            onChangeText={(text) => setPinAdd(text)}
+            placeholder="PIN"
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            style={[
+              styles.textInput,
+              {
+                color: colors.text,
+              },
+            ]}
+          />
+        </View>
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+          <Icon name="map-marker" color={colors.text} size={20} />
+          <TextInput
+            value={city}
+            onChangeText={(text) => setCity(text)}
             placeholder="City"
             placeholderTextColor="#666666"
             autoCorrect={false}
@@ -227,9 +215,11 @@ const ShopEditProfile = () => {
             ]}
           />
         </View>
-        <View style={styles.action}>
+        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
           <FontAwesome name="globe" color={colors.text} size={20} />
           <TextInput
+            value={state}
+            onChangeText={(text) => setState(text)}
             placeholder="State"
             placeholderTextColor="#666666"
             autoCorrect={false}
@@ -241,11 +231,26 @@ const ShopEditProfile = () => {
             ]}
           />
         </View>
-        <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
-          <Text style={styles.panelButtonTitle}>Submit</Text>
+
+        <TouchableOpacity
+          className={`bg-gray-300 p-4 rounded-md mt-4 ${name ?'bg-black':'' }`}
+          onPress={updateUser}
+          disabled={!name}
+        >
+          <Text style={styles.panelButtonTitle} className="text-center">
+            Submit
+          </Text>
         </TouchableOpacity>
-      {/* </Animated.View> */}
-    </View>
+        {error && (
+          <View className="p-3 mt-4 bg-red-100">
+            <Text className=" text-red-800">{error}</Text>
+          </View>
+        )}
+      </View>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
+    
+    </>
   );
 };
 
@@ -258,42 +263,40 @@ const styles = StyleSheet.create({
   commandButton: {
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#000000',
-    alignItems: 'center',
+    backgroundColor: "#FF6347",
+    alignItems: "center",
     marginTop: 10,
-    width:300,
-    marginLeft:30
   },
   panel: {
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     paddingTop: 20,
-     borderTopLeftRadius: 20,
-     borderTopRightRadius: 20,
-     shadowColor: '#000000',
-     shadowOffset: {width: 0, height: 0},
-     shadowRadius: 5,
-     shadowOpacity: 0.4,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 5,
+    shadowOpacity: 0.4,
   },
   header: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#333333",
+    shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
-     elevation: 5,
+    elevation: 5,
     paddingTop: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   panelHeader: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   panelHandle: {
     width: 40,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#00000040',
+    backgroundColor: "#00000040",
     marginBottom: 10,
   },
   panelTitle: {
@@ -302,42 +305,41 @@ const styles = StyleSheet.create({
   },
   panelSubtitle: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
     height: 30,
     marginBottom: 10,
   },
   panelButton: {
     padding: 13,
     borderRadius: 10,
-    backgroundColor: '#FF6347',
-    alignItems: 'center',
+    backgroundColor: "#FF6347",
+    alignItems: "center",
     marginVertical: 7,
   },
   panelButtonTitle: {
     fontSize: 17,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   action: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 10,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f2f2f2',
+    borderBottomColor: "#f2f2f2",
     paddingBottom: 5,
-    marginLeft:5
   },
   actionError: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#FF0000',
+    borderBottomColor: "#FF0000",
     paddingBottom: 5,
   },
   textInput: {
     flex: 1,
     paddingLeft: 10,
-    color: '#05375a',
+    color: "#05375a",
   },
 });
 

@@ -17,10 +17,11 @@ import { useNavigation } from "@react-navigation/native";
 //import ShopProfile from '../../screens/ShopProfile'
 import ShopProfileTabBar from '../../components/shop/ShopProfileTabBar';
 import useGetUser from '../../hooks/useGetUser';
+import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../../FirebaseConfig';
 
 
-const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', fullAddress }) => {
-  const [isShopOpen,setIsShopOpen] = useState(true)
+const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', fullAddress,isShopOpen }) => {
   const [isCustomer,setIsCustomer] = useState(false)
   const profile = useGetUser()
   
@@ -31,8 +32,26 @@ const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', f
   //   Linking.openURL(`whatsapp://send?phone=${contactDetails.contact}`)
   // }
   const navigation= useNavigation()
-  const onToggle = ()=>{
-    setIsShopOpen(!isShopOpen)
+  const onToggle =async ()=>{
+
+    const userProfileRef = collection(FIRESTORE_DB, "shopProfile");
+      const querySnapshot = await getDocs(
+        query(userProfileRef, where("uid", "==", profile?.uid))
+      );
+
+      // Check if there is a matching document
+      if (!querySnapshot.empty) {
+        // Assuming there's only one document with the given name, you can access it directly
+        console.log(querySnapshot.docs[0]);
+        const userDocRef = querySnapshot.docs[0].ref;
+        const updatedProfile = {
+          ...profile,
+          isShopOpen: !isShopOpen
+        }
+
+        console.log(updatedProfile)
+        await updateDoc(userDocRef, updatedProfile);
+      }
   }
   
   const editProfile = ()=>{

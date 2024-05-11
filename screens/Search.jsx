@@ -151,7 +151,7 @@ const Search = () => {
           productList: [],
           postList: [],
           videoList: [],
-          isShopOpen: false,
+          isShopOpen: profile?.isShopOpen,
           isUser: profile?.isUser,
         };
       })
@@ -191,7 +191,7 @@ const Search = () => {
           productList: [],
           postList: [],
           videoList: [],
-          isShopOpen: false,
+          isShopOpen: profile?.isShopOpen,
           isUser: profile?.isUser,
         };
       })
@@ -221,7 +221,7 @@ const Search = () => {
             productList: [],
             postList: [],
             videoList: [],
-            isShopOpen: false,
+            isShopOpen: profile?.isShopOpen,
             isUser: profile?.isUser,
           };
         })

@@ -8,7 +8,6 @@ import ShopProfileTabBar from '../../components/shop/ShopProfileTabBar'
 const ShopProfileForUser = ({route}) => {  
   const [shopProfile,setShopProfile] = useState({})
 
-  console.log(shopProfile?.name,shopProfile?.id)
  useEffect(()=>{
   setShopProfile(route.params.profile)
  },[route.params])

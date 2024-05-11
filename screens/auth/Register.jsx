@@ -76,7 +76,7 @@ const Register = () => {
         alert('Invalid email address');
         return;
       }
-      if(mobile.length<10){
+      if(mobile.length<10 || mobile.length>11){
         alert('Invalid mobile number');
         return;
       }

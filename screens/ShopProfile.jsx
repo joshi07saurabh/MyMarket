@@ -30,7 +30,7 @@ const ShopProfile = () => {
       "productList": [],
       "postList": [],
       "videoList": [],
-      "isShopOpen": false,
+      "isShopOpen": profile?.isShopOpen,
       "isUser": profile?.isUser
   })
   },[profile])

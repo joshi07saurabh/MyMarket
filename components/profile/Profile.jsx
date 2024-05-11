@@ -17,11 +17,20 @@ import AppToggle from '../app-toggle/AppToggle';
 import { useNavigation } from "@react-navigation/native";
 import useGetUser from '../../hooks/useGetUser';
 import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
+import { collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../../FirebaseConfig';
+import { updateEmail } from 'firebase/auth';
+import { addUser } from '../../redux/action';
+import { useDispatch } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
-const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id}) => {
-  const [isShopOpen,setIsShopOpen] = useState(true)
+const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id , isShopOpen}) => {
+
+  console.log(isShopOpen)
+  const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
   const currentLoggedUser = useGetUser()
   const [isSelfOwner,setIsSelfOwner] = useState(false)
   useEffect(()=>{
@@ -35,8 +44,31 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
   const goToWhatsapp = () => {
     Linking.openURL(`whatsapp://send?phone=${contactDetails.contact}`)
   }
-  const onToggle = ()=>{
-    setIsShopOpen(!isShopOpen)
+  const onToggle =async ()=>{
+    setIsLoading(true)
+
+    const userProfileRef = collection(FIRESTORE_DB, "shopProfile");
+      const querySnapshot = await getDocs(
+        query(userProfileRef, where("uid", "==", id))
+      );
+
+      // Check if there is a matching document
+      if (!querySnapshot.empty) {
+        // Assuming there's only one document with the given name, you can access it directly
+        console.log(querySnapshot.docs[0]);
+        const userDocRef = querySnapshot.docs[0].ref;
+        const updatedProfile = {
+          ...currentLoggedUser,
+          isShopOpen: !isShopOpen
+        }
+
+        console.log(updatedProfile)
+        await updateDoc(userDocRef, updatedProfile);
+        dispatch(
+          addUser(updatedProfile)
+        );
+        setIsLoading(false)
+      }
   }
   const editProfile = ()=>{
     navigation.navigate('ShopEditProfile')
@@ -67,6 +99,11 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
   }
   return (
     <SafeAreaView className='bg-white'>
+      <Spinner
+          visible={isLoading}
+          textContent={isShopOpen?'Closing Shop...': 'Opening Shop...'}
+          textStyle={{color: '#FFF'}}
+        />
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: 'row', marginTop: 15 }}>
           <Avatar.Image

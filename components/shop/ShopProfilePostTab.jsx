@@ -11,14 +11,9 @@ const ShopProfilePostTab = ({id}) => {
   useEffect(()=>{
     fetchPosts()
   },[])
-  useEffect(()=>{
-  const unsubscribe =  navigation.addListener('refreshPostDetails', ()=>{
-    console.log('Refreshing post details')
-      fetchPosts()
-    })
 
-    return unsubscribe
-  },[])
+    
+
 
   const fetchPosts = async ()=>{
     setIsLoading(true);
