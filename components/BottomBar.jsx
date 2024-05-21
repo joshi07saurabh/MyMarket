@@ -54,7 +54,7 @@ const BottomBar = () => {
         }}
 >
 
-        <Tab.Screen name={homeName} options={{headerShown: false}} component={HomeScreen}></Tab.Screen>
+        <Tab.Screen name={homeName} options={{headerShown: false,unmountOnBlur: true}} component={HomeScreen}></Tab.Screen>
         <Tab.Screen name={search} options={{headerShown: false}} component={SeachScreen}></Tab.Screen>
         {
           !profile?.isUser &&
@@ -66,9 +66,9 @@ const BottomBar = () => {
         {
           profile?.isUser ? 
           //  (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfileScreen}></Tab.Screen>):
-           (<Tab.Screen name={profileName} options={{headerShown: false}} component={UserProfile}></Tab.Screen>):
+           (<Tab.Screen name={profileName} options={{headerShown: false,unmountOnBlur:true}} component={UserProfile}></Tab.Screen>):
           
-          (<Tab.Screen name={profileName} options={{headerShown: false}} component={ShopProfile}></Tab.Screen>)
+          (<Tab.Screen name={profileName} options={{headerShown: false,unmountOnBlur:true}} component={ShopProfile}></Tab.Screen>)
 
         }
         

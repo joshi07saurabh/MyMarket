@@ -135,7 +135,7 @@ const Search = () => {
           id: profile?.uid,
           name: profile?.shopName,
           category: profile?.category || "New",
-          shopImage: "https://etimg.etb2bimg.com/photo/76159933.cms",
+          shopImage: profile?.imageURL,
           address: profile?.mainAdd,
           city: profile?.cityAdd,
           state: profile?.stateAdd,
@@ -159,9 +159,8 @@ const Search = () => {
   };
 
   useEffect(() => {
-    fetchAllShopData();
-    
-  }, []);
+    fetchAllShopData(); 
+  },[]);
 
   const fetchall = async (name) => {
     console.log(shopData);
@@ -175,7 +174,7 @@ const Search = () => {
           id: profile?.uid,
           name: profile?.shopName,
           category: profile?.category || "New",
-          shopImage: "https://etimg.etb2bimg.com/photo/76159933.cms",
+          shopImage: profile?.imageURL,
           address: profile?.mainAdd,
           city: profile?.cityAdd,
           state: profile?.stateAdd,
@@ -205,7 +204,7 @@ const Search = () => {
             id: profile?.uid,
             name: profile?.shopName,
             category: profile?.category || "New",
-            shopImage: "https://etimg.etb2bimg.com/photo/76159933.cms",
+            shopImage: profile?.imageURL,
             address: profile?.mainAdd,
             city: profile?.cityAdd,
             state: profile?.stateAdd,
@@ -275,7 +274,7 @@ const Search = () => {
                 <View>
                   <Image
                     source={{
-                      uri: "https://etimg.etb2bimg.com/photo/76159933.cms",
+                      uri: dataItem.shopImage,
                     }}
                     className="rounded-md w-16 h-16 m-1"
                   />

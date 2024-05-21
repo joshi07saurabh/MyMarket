@@ -1,23 +1,32 @@
-import { View, Text,SafeAreaView } from 'react-native'
+import { View, Text,SafeAreaView, ScrollView, RefreshControl, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ShopListItem from './ShopListItem'
 import data from '../../data/data.json'
 import { getAllShop } from '../../database/getAllShop'
+import useGetUser from '../../hooks/useGetUser'
 
-const ShopList = () => {
-    const [shopData,setShopData] = useState(data.shopData)
+const ShopList = ({route}) => {
+    const [shopData,setShopData] = useState([])
+    const currentUser = useGetUser();
+    const [isRefreshing,setIsRefreshing] = useState(false)
     useEffect(()=>{
       getShopData()
-    },[])
+
+     return () =>{
+      console.log('bhar hai')
+     }
+    },[route])
 
     const getShopData = async ()=>{
+      setIsRefreshing(true)
+      console.log('refreshing')
       const shopList =await getAllShop();
       setShopData(shopList?.map((profile) => {
          return {
              "id":profile?.uid,
              "name": profile?.shopName,
              "category": profile?.category || "New",
-             "shopImage": "https://etimg.etb2bimg.com/photo/76159933.cms",
+             "shopImage": profile?.imageURL,
              "address": profile?.mainAdd,
              "city": profile?.cityAdd,
              "state": profile?.stateAdd,
@@ -37,16 +46,19 @@ const ShopList = () => {
              "isUser": profile?.isUser
          }
        }))
+       setIsRefreshing(false)
     }
     
   return (
-    <SafeAreaView className="h-full w-full">
-        {
-            shopData?.map(shopItem=>{
-                return <ShopListItem key={shopItem.id} {...shopItem}/>
-            })
-        }
-    </SafeAreaView>
+    <View className="h-full w-full">
+      <FlatList
+      data={shopData}
+      onRefresh={getShopData}
+      refreshing={isRefreshing}
+      renderItem={({item})=><ShopListItem {...item}/>}
+      keyExtractor={item=>item.id}
+      />
+    </View>
   )
 }
 

@@ -7,11 +7,9 @@ import { useSelector } from 'react-redux'
 
 const Home = () => {
   return (
-    <ScrollView>
     <View  className='flex flexGrow-1  bg-white h-full'>
       <ShopList/>
     </View>
-    </ScrollView>
   )
 }
 

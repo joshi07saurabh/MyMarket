@@ -14,7 +14,7 @@ const ShopProfile = () => {
       "id":profile?.uid,
       "name": profile?.shopName,
       "category": profile?.category || "New",
-      "shopImage": "https://etimg.etb2bimg.com/photo/76159933.cms",
+      "shopImage": profile?.imageURL,
       "address": profile?.mainAdd,
       "city": profile?.cityAdd,
       "state": profile?.stateAdd,

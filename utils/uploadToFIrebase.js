@@ -24,3 +24,13 @@ export const uploadToFirebase = (blob,name) => {
         uid: uid,
       })
   }
+
+  export const uploadToProductTable =async ( url,uid,price,description )=>{
+    console.log(url,uid,'hu')
+    await addDoc(collection(FIRESTORE_DB,'productTable'),{
+        imageURL: url,
+        uid,
+        price,
+        description,
+      })
+  }

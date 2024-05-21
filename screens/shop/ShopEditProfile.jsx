@@ -8,28 +8,35 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Button,
 } from "react-native";
 
-import { ActivityIndicator, useTheme } from "react-native-paper";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import * as ImagePicker from "expo-image-picker";
+import {
+  uploadToFirebase,
+  uploadToPostTable,
+} from "../../utils/uploadToFIrebase";
+import { uriToBlob } from "../../utils/uriToBlob";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+
+import { getURL } from "../../utils/getDownloadUrl";
+import useGetUser from "../../hooks/useGetUser";
+import { useNavigation } from "@react-navigation/native";
+
+import { useTheme } from "react-native-paper";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useGetUser from "../../hooks/useGetUser";
 import {
   collection,
-  doc,
   getDocs,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useNavigation } from "@react-navigation/native";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { getAuth, updateProfile } from "firebase/auth";
-import getUser from "../../database/getUserProfile";
 import { addUser } from "../../redux/action";
 import { useDispatch } from "react-redux";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -43,21 +50,22 @@ const ShopEditProfile = () => {
   const [name, setName] = useState(profile?.name);
   const [city, setCity] = useState(profile?.city || "");
   const [phone, setPhone] = useState(profile?.phone || "");
-  const [state,setState] = useState(profile?.state || "");
+  const [state, setState] = useState(profile?.state || "");
   const [address, setAddress] = useState(profile?.address || "");
   const [landmark, setLandmark] = useState(profile?.landmarkAdd || "");
   const [pinAdd, setPinAdd] = useState(profile?.pinAdd || "");
   const [error, setError] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [ isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = async () => {
-   
     try {
-      
-      setIsLoading(true)
+      setIsLoading(true);
       setError("");
+      // console.log("Upload")
+      const URL = await uploadImage();
+      console.log('Upload',URL)
       const userProfileRef = collection(FIRESTORE_DB, "shopProfile");
       const querySnapshot = await getDocs(
         query(userProfileRef, where("uid", "==", profile.uid))
@@ -65,8 +73,9 @@ const ShopEditProfile = () => {
 
       // Check if there is a matching document
       if (!querySnapshot.empty) {
+
         // Assuming there's only one document with the given name, you can access it directly
-        console.log(querySnapshot.docs[0]);
+        console.log('hui',snapshotForProfile);
         const userDocRef = querySnapshot.docs[0].ref;
         const updatedProfile = {
           ...profile,
@@ -75,181 +84,254 @@ const ShopEditProfile = () => {
           mobileNumber: phone || profile.mobileNumber,
           stateAdd: state || profile.stateAdd,
           mainAdd: address || profile.mainAdd,
-          landmarkAdd : landmark || profile.landmarkAdd,
-          pinAdd : pinAdd || profile.pinAdd
-        }
+          landmarkAdd: landmark || profile.landmarkAdd,
+          pinAdd: pinAdd || profile.pinAdd,
+          imageURL: URL || profile.imageURL,
+        };
         await updateDoc(userDocRef, updatedProfile);
-        dispatch(
-          addUser(updatedProfile)
-        );
+        dispatch(addUser(updatedProfile));
         navigation.goBack(null);
-      } 
-      
-      else {
+      } else {
         setError("User does not exists!");
       }
       // navigation.goBack(null)
     } catch (e) {
       console.log(e);
       setError("Something went wrong!");
+    } finally {
+      setIsLoading(false);
     }
-    finally{
-      setIsLoading(false)
+  };
+
+  // profile image change
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImageName, setSelectedImageName] = useState("");
+  const [snapshotForProfile, setSnapshotForProfile] = useState("");
+
+  const pickImage = async () => {
+    try {
+      const { canceled, assets } = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        aspect: [1, 1], // Ensures a square aspect ratio for simplicity
+        quality: 1,
+      });
+
+      console.log(assets);
+
+      if (!canceled) {
+        setSelectedImage(assets[0].uri);
+        setSelectedImageName(assets[0].fileName);
+
+        
+      }
+    } catch (error) {
+      console.log("Error picking image:", error);
+    }
+  };
+
+  const post = async (snapshot) => {
+    const URL = await getURL(snapshot.metadata.fullPath);
+    await uploadToPostTable(URL, profile?.uid);
+    setSelectedImage(defaultURL);
+    setSelectedImageName("");
+  };
+
+  const uploadImage = async () => {
+    try{
+    // Implement image upload logic here
+    // You can use selectedImage URI to upload the image
+    const blob = await uriToBlob(selectedImage);
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `uploads/${selectedImageName}`);
+    const snapshot = await uploadBytes(storageRef, blob);
+    console.log('path:',snapshot.metadata.fullPath)
+    const URL = await getURL(snapshot.metadata.fullPath);
+    return URL
+    }
+    catch(e){
+      return '';
     }
   };
 
   return (
     <>
-    <Spinner
-          visible={isLoading}
-          textContent={'Updating...'}
-          textStyle={{color: '#FFF'}}
-        />
-    <SafeAreaView style={styles.container} className="bg-white">
-      <KeyboardAwareScrollView>
-      <View className="w-full flex flex-row justify-center mt-10 mb-4">
-        <View className="rounded-full overflow-hidden w-20 h-20">
-          <Image
-            source={{
-              uri: "https://media.wired.com/photos/59d6bc37b9dfe230914d0dd6/master/w_1600%2Cc_limit/fox.gif",
-            }}
-            className="w-20 h-20 border"
-          />
-        </View>
-      </View>
-      <View className="mx-4">
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <FontAwesome name="user" color={colors.text} size={20} />
-          <TextInput
-            value={name}
-            onChangeText={(text) => setName(text)}
-            placeholder="Shop Name"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <FontAwesome name="phone" color={colors.text} size={20} />
-          <TextInput
-            value={phone}
-            onChangeText={(text) => setPhone(text)}
-            placeholder="Phone"
-            placeholderTextColor="#666666"
-            keyboardType="number-pad"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <FontAwesome name="address-card" color={colors.text} size={20} />
-          <TextInput
-            value={address}
-            onChangeText={(text) => setAddress(text)}
-            placeholder="Main Line Address"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <Icon name="map-legend" color={colors.text} size={20} />
-          <TextInput
-            value={landmark}
-            onChangeText={(text) => setLandmark(text)}
-            placeholder="Landmark"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <Icon name="map-marker-radius" color={colors.text} size={20} />
-          <TextInput
-            value={pinAdd}
-            onChangeText={(text) => setPinAdd(text)}
-            placeholder="PIN"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <Icon name="map-marker" color={colors.text} size={20} />
-          <TextInput
-            value={city}
-            onChangeText={(text) => setCity(text)}
-            placeholder="City"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
-          <FontAwesome name="globe" color={colors.text} size={20} />
-          <TextInput
-            value={state}
-            onChangeText={(text) => setState(text)}
-            placeholder="State"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-
-        <TouchableOpacity
-          className={`bg-gray-300 p-4 rounded-md mt-4 ${name ?'bg-black':'' }`}
-          onPress={updateUser}
-          disabled={!name}
-        >
-          <Text style={styles.panelButtonTitle} className="text-center">
-            Submit
-          </Text>
-        </TouchableOpacity>
-        {error && (
-          <View className="p-3 mt-4 bg-red-100">
-            <Text className=" text-red-800">{error}</Text>
+      <Spinner
+        visible={isLoading}
+        textContent={"Updating..."}
+        textStyle={{ color: "#FFF" }}
+      />
+      <SafeAreaView style={styles.container} className="bg-white">
+        <KeyboardAwareScrollView>
+          <View className="w-full flex flex-row justify-center mt-10 mb-4">
+            <View className="flex flex-column items-center justify-center w-full relative">
+              {selectedImage ? (
+                <Image
+                  source={{ uri: selectedImage }}
+                  style={{
+                    width: 90,
+                    height: 90,
+                    marginBottom: 20,
+                    borderColor: "black",
+                    borderRadius: 10,
+                  }}
+                  className="rounded-full"
+                />
+              ) : (
+                <View className=" border border-gray-300 p-8 rounded-full">
+                <FontAwesome
+                  name="camera"
+                  onPress={pickImage}
+                  color={"black"}
+                  size={22}
+                />
+              </View>
+              )}
+            { selectedImage && <View className="absolute bg-white p-2 rounded-full left-[55%] top-[45%]">
+                <FontAwesome
+                  name="camera"
+                  onPress={pickImage}
+                  color={"black"}
+                  size={22}
+                />
+              </View>
+}
+            </View>
           </View>
-        )}
-      </View>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
-    
+          <View className="mx-4">
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <FontAwesome name="user" color={colors.text} size={20} />
+              <TextInput
+                value={name}
+                onChangeText={(text) => setName(text)}
+                placeholder="Shop Name"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <FontAwesome name="phone" color={colors.text} size={20} />
+              <TextInput
+                value={phone}
+                onChangeText={(text) => setPhone(text)}
+                placeholder="Phone"
+                placeholderTextColor="#666666"
+                keyboardType="number-pad"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <FontAwesome name="address-card" color={colors.text} size={20} />
+              <TextInput
+                value={address}
+                onChangeText={(text) => setAddress(text)}
+                placeholder="Main Line Address"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <Icon name="map-legend" color={colors.text} size={20} />
+              <TextInput
+                value={landmark}
+                onChangeText={(text) => setLandmark(text)}
+                placeholder="Landmark"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <Icon name="map-marker-radius" color={colors.text} size={20} />
+              <TextInput
+                value={pinAdd}
+                onChangeText={(text) => setPinAdd(text)}
+                placeholder="PIN"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <Icon name="map-marker" color={colors.text} size={20} />
+              <TextInput
+                value={city}
+                onChangeText={(text) => setCity(text)}
+                placeholder="City"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+            <View className="bg-white p-2 h-16 pl-4 border border-gray-200 rounded-md my-3   flex flex-row gap-1 justify-center items-center">
+              <FontAwesome name="globe" color={colors.text} size={20} />
+              <TextInput
+                value={state}
+                onChangeText={(text) => setState(text)}
+                placeholder="State"
+                placeholderTextColor="#666666"
+                autoCorrect={false}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+
+            <TouchableOpacity
+              className={`bg-gray-300 p-4 rounded-md mt-4 ${
+                name || selectedImage ? "bg-black" : ""
+              }`}
+              onPress={updateUser}
+              disabled={!name && !selectedImage}
+            >
+              <Text style={styles.panelButtonTitle} className="text-center">
+                Submit
+              </Text>
+            </TouchableOpacity>
+            {error && (
+              <View className="p-3 mt-4 bg-red-100">
+                <Text className=" text-red-800">{error}</Text>
+              </View>
+            )}
+          </View>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
     </>
   );
 };
