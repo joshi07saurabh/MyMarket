@@ -17,7 +17,6 @@ export const getAllProduct =async (id)=>{
     return list || []
 }
 catch(err){
-    console.log(err)
     return []
 }
 return []

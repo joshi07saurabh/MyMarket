@@ -13,13 +13,11 @@ const ShopList = ({route}) => {
       getShopData()
 
      return () =>{
-      console.log('bhar hai')
      }
     },[route])
 
     const getShopData = async ()=>{
       setIsRefreshing(true)
-      console.log('refreshing')
       const shopList =await getAllShop();
       setShopData(shopList?.map((profile) => {
          return {

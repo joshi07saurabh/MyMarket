@@ -11,7 +11,6 @@ export const getAllShop =async ()=>{
     return list || []
 }
 catch(err){
-    console.log(err)
     return []
 }
 return []

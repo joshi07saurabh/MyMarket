@@ -18,7 +18,6 @@ export const uploadToFirebase = (blob,name) => {
   }
 
   export const uploadToPostTable =async ( url,uid )=>{
-    console.log(url,uid,'hu')
     await addDoc(collection(FIRESTORE_DB,'postTable'),{
         imageURL: url,
         uid: uid,
@@ -26,7 +25,6 @@ export const uploadToFirebase = (blob,name) => {
   }
 
   export const uploadToProductTable =async ( url,uid,price,description )=>{
-    console.log(url,uid,'hu')
     await addDoc(collection(FIRESTORE_DB,'productTable'),{
         imageURL: url,
         uid,

@@ -25,14 +25,11 @@ const AddPost = () => {
       
       });
 
-      console.log(assets)
-
       if (!canceled) {
         setSelectedImage(assets[0].uri)
         setSelectedImageName(assets[0].fileName)
       }
     } catch (error) {
-      console.log('Error picking image:', error);
     }
   };
 
@@ -62,7 +59,7 @@ const AddPost = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
       {selectedImage ? (
-        <Image source={{ uri: selectedImage }} style={{ width: imageBoxSize, height: imageBoxSize, marginBottom: 20, overflow:'hidden', flex:1, borderColor:'black',borderRadius:10, }}  className=''/>
+        <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200, marginBottom: 20, overflow:'hidden', flex:1, borderColor:'black',borderRadius:10, }}  className=''/>
       ) : (
         <View style={{ width: 200, height: 200, backgroundColor: 'lightgray', margin: 20 }} />
       )}

@@ -22,7 +22,6 @@ const ShopProfilePostTab = ({id}) => {
      setIsLoading(false);
   }
   const goToImage = (postLink,postId) => {
-    console.log('iddd',id)
     navigation.navigate("PostDetail", { image: postLink, id: postId,postOwnerId: id });
   };
 
@@ -40,7 +39,7 @@ const ShopProfilePostTab = ({id}) => {
     <ScrollView className='bg-white'>
       <View className="flex flex-row flex-wrap bg-white h-full">
         {postLinks?.map((postLink) => (
-            <View className="w-1/3 h-40 aspect-square border border-white">
+            <View className="w-1/3 h-40 aspect-square border border-white" key={postLink.uid}>
               <TouchableOpacity onPress={()=>goToImage(postLink.imageURL,postLink.uid,id)}>
               <Image
                 source={{ uri: postLink.imageURL }}

@@ -46,13 +46,11 @@ const signIn = async () => {
   await setItemToAsyncStorage('isLoggedIn', true)
   await setItemToAsyncStorage('profile',profile)
   const value = await getItemFromAsyncStorage('isLoggedIn')
-  console.log(value)
 
   navigation.dispatch(
     StackActions.replace('Main'))
   // navigation.navigate('Main')
   } catch (error) {
-  console.log(error);
   alert("Sign In failed!" + error.Message)
   } finally{
   setLoading (false);

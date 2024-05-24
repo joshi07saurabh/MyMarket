@@ -26,7 +26,7 @@ const ShopUploadActivity = () => {
         <TouchableOpacity onPress={ProductTabClicked} className='w-1/2 border-gray-200 border-r h-full p-4'>
           <View className={`w-full flex flex-1 items-center justify-center ${!isAddPostTabEnabled ? 'text-black' : 'text-gray-500'}`}>
         <Icon name="sticker-plus" color={!isAddPostTabEnabled?'black':'#777777'} size={20} />
-            <Text className={`text-[10px] text-center ${!isAddPostTabEnabled ? 'text-black' : 'text-gray-500'}`}>Add Post</Text>
+            <Text className={`text-[10px] text-center ${!isAddPostTabEnabled ? 'text-black' : 'text-gray-500'}`}>Add Product</Text>
             </View>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={changeTab} className='w-1/2 border-gray-200 border-r h-full p-4'>

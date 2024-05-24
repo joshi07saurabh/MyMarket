@@ -54,7 +54,6 @@ const Register = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
       navigation.navigate('Main')
     } catch (error) {
-      console.log(error);
       alert("Sign In failed!" + error.Message)
     } finally {
       setLoading(false);
@@ -117,11 +116,9 @@ const Register = () => {
       const profile = await getUser(user.uid)
       dispatch(addUser(profile))
       await setItemToAsyncStorage('isLoggedIn', true)
-      // console.log(docRef)
       navigation.dispatch(
         StackActions.replace('Main'))
     } catch (error) {
-      console.log(error);
       alert("Sign Up failed!" + error.Message)
     } finally {
       setLoading(false);

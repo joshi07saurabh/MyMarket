@@ -28,13 +28,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id , isShopOpen}) => {
 
-  console.log(isShopOpen)
+
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const currentLoggedUser = useGetUser()
   const [isSelfOwner,setIsSelfOwner] = useState(false)
   useEffect(()=>{
-    console.log('idddd',currentLoggedUser?.uid, id)
     setIsSelfOwner(currentLoggedUser?.uid === id)
   },[currentLoggedUser,id])
   const navigation = useNavigation()
@@ -55,14 +54,12 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
       // Check if there is a matching document
       if (!querySnapshot.empty) {
         // Assuming there's only one document with the given name, you can access it directly
-        console.log(querySnapshot.docs[0]);
         const userDocRef = querySnapshot.docs[0].ref;
         const updatedProfile = {
           ...currentLoggedUser,
           isShopOpen: !isShopOpen
         }
 
-        console.log(updatedProfile)
         await updateDoc(userDocRef, updatedProfile);
         dispatch(
           addUser(updatedProfile)
@@ -80,7 +77,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
     Alert.alert('Logout','Are you sure you want to log out',
     [{
       text : 'Cancel',
-      onPress : () => console.log('Cancel Pressed'),
+      onPress : () => {},
       style : 'cancel'
     },
     {
@@ -145,10 +142,6 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
             <Icon name="email" color="#777777" size={20} />
             <Text style={{ color: "#777777", marginLeft: 20 }}>{contactDetails?.email}</Text>
           </View>
-          {isSelfOwner &&   <View style={styles.row} className='mr-14 mt-3'>
-            <Icon name="eye" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }} >123 Views</Text>
-          </View>}
         </View>
         
         {!isSelfOwner &&   <View className='mr-5 self-end mb-8'>

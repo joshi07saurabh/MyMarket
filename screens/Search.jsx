@@ -163,11 +163,9 @@ const Search = () => {
   },[]);
 
   const fetchall = async (name) => {
-    console.log(shopData);
     const filteredData = shopData.filter((shopItem) =>
       shopItem.shopName.toLowerCase().includes(name.toLowerCase())
     );
-    console.log(filteredData);
     setData(
       filteredData?.map((profile) => {
         return {
@@ -269,7 +267,7 @@ const Search = () => {
       <View>
         {data.map((dataItem) => {
           return (
-            <TouchableOpacity onPress={() => goToShopProfile(dataItem)}>
+            <TouchableOpacity key={dataItem.name}  onPress={() => goToShopProfile(dataItem)}>
               <View className="flex flex-row bg-white m-1 rounded-md shadow-sm shadow-black">
                 <View>
                   <Image

@@ -15,25 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import useGetUser from '../../hooks/useGetUser';
 import { setItemToAsyncStorage } from '../../utils/setItemAsyncStorage';
 
-// import Share from 'react-native-share';
-
-
 const UserProfile = () => {
-
-  // const myCustomShare = async() => {
-  //   const shareOptions = {
-  //     message: 'Order your next meal from FoodFinder App. I\'ve already ordered more than 10 meals on it.',
-  //     url: '../assets/logo.png',
-  //     // urls: [files.image1, files.image2]
-  //   }
-
-  //   try {
-  //     const ShareResponse = await Share.open(shareOptions);
-  //     console.log(JSON.stringify(ShareResponse));
-  //   } catch(error) {
-  //     console.log('Error => ', error);
-  //   }
-  // };
   const navigation = useNavigation()
   const editProfile = ()=>{
     navigation.navigate('EditProfileUser')
@@ -44,7 +26,7 @@ const UserProfile = () => {
     Alert.alert('Logout','Are you sure you want to log out',
     [{
       text : 'Cancel',
-      onPress : () => console.log('Cancel Pressed'),
+      onPress : () => {},
       style : 'cancel'
     },
     {

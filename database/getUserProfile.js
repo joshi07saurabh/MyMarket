@@ -18,7 +18,6 @@ const getUser =async (id)=>{
     })
     return profileData
     }catch(err){
-        console.log(err)
     }
     
     return null

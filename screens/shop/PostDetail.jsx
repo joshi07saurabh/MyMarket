@@ -14,7 +14,6 @@ const PostDetail = ({ route }) => {
   const [isLoading,setIsLoading] = useState(false);
   const navigation = useNavigation();
   const currentLoggedUser = useGetUser();
-  console.log('user',currentLoggedUser?.uid);
   const deletePost = () => {
     
     Alert.alert(
@@ -23,7 +22,7 @@ const PostDetail = ({ route }) => {
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => {},
           style: "cancel",
         },
         {
@@ -38,7 +37,6 @@ const PostDetail = ({ route }) => {
               navigation.goBack({message:'refresh'})
               setIsLoading(false);
             } catch (e) {
-              console.log(e);
             }
           },
         },

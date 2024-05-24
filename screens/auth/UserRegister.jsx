@@ -35,7 +35,6 @@ const signIn = async () => {
   const response = await signInWithEmailAndPassword(auth,email, password);
   navigation.navigate('Main')
   } catch (error) {
-  console.log(error);
   alert("Sign In failed!" + error.Message)
   } finally{
   setLoading (false);
@@ -77,7 +76,6 @@ const signUp = async () => {
   navigation.dispatch(
     StackActions.replace('Main'))
   } catch (error) {
-  console.log(error);
   alert("Sign Up failed!" + error.Message)
   } finally{
   setLoading (false);

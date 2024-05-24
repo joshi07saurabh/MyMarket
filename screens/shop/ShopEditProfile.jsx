@@ -45,8 +45,6 @@ const ShopEditProfile = () => {
   const { colors } = useTheme();
   const profile = useGetUser();
 
-  console.log(profile);
-
   const [name, setName] = useState(profile?.name);
   const [city, setCity] = useState(profile?.city || "");
   const [phone, setPhone] = useState(profile?.phone || "");
@@ -63,9 +61,7 @@ const ShopEditProfile = () => {
     try {
       setIsLoading(true);
       setError("");
-      // console.log("Upload")
       const URL = await uploadImage();
-      console.log('Upload',URL)
       const userProfileRef = collection(FIRESTORE_DB, "shopProfile");
       const querySnapshot = await getDocs(
         query(userProfileRef, where("uid", "==", profile.uid))
@@ -75,7 +71,6 @@ const ShopEditProfile = () => {
       if (!querySnapshot.empty) {
 
         // Assuming there's only one document with the given name, you can access it directly
-        console.log('hui',snapshotForProfile);
         const userDocRef = querySnapshot.docs[0].ref;
         const updatedProfile = {
           ...profile,
@@ -96,7 +91,6 @@ const ShopEditProfile = () => {
       }
       // navigation.goBack(null)
     } catch (e) {
-      console.log(e);
       setError("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -116,8 +110,6 @@ const ShopEditProfile = () => {
         quality: 1,
       });
 
-      console.log(assets);
-
       if (!canceled) {
         setSelectedImage(assets[0].uri);
         setSelectedImageName(assets[0].fileName);
@@ -125,7 +117,6 @@ const ShopEditProfile = () => {
         
       }
     } catch (error) {
-      console.log("Error picking image:", error);
     }
   };
 
@@ -145,7 +136,6 @@ const ShopEditProfile = () => {
     const storage = getStorage();
     const storageRef = ref(storage, `uploads/${selectedImageName}`);
     const snapshot = await uploadBytes(storageRef, blob);
-    console.log('path:',snapshot.metadata.fullPath)
     const URL = await getURL(snapshot.metadata.fullPath);
     return URL
     }

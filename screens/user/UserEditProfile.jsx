@@ -36,8 +36,6 @@ const UserEditProfile = () => {
   const { colors } = useTheme();
   const profile = useGetUser();
 
-  console.log(profile);
-
   const [name, setName] = useState(profile?.name);
   const [city, setCity] = useState(profile?.city || "");
   const [phone, setPhone] = useState(profile?.phone || "");
@@ -62,7 +60,6 @@ const UserEditProfile = () => {
       // Check if there is a matching document
       if (!querySnapshot.empty) {
         // Assuming there's only one document with the given name, you can access it directly
-        console.log(querySnapshot.docs[0]);
         const userDocRef = querySnapshot.docs[0].ref;
         const updatedProfile = {
           ...profile,
@@ -80,7 +77,6 @@ const UserEditProfile = () => {
       }
       // navigation.goBack(null)
     } catch (e) {
-      console.log(e);
       setError("Something went wrong!");
     }
     finally{

@@ -32,8 +32,9 @@ import { useNavigation } from "@react-navigation/native";
 //  import Animated from 'react-native-reanimated';
 
 const AddProduct = () => {
+  const defaultURL = 'https://i.pinimg.com/736x/61/54/18/61541805b3069740ecd60d483741e5bb.jpg'
   const [image, setImage] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(defaultURL);
   const [selectedImageName, setSelectedImageName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
@@ -54,12 +55,10 @@ const AddProduct = () => {
         setSelectedImageName(assets[0].fileName);
       }
     } catch (e) {
-      console.log(e);
     }
   };
 
   const post = async (snapshot) => {
-    console.log(snapshot.metadata.fullPath);
     const URL = await getURL(snapshot.metadata.fullPath);
     await uploadToProductTable(URL, profile?.uid, price, desc);
     setSelectedImage("");
@@ -81,13 +80,11 @@ const AddProduct = () => {
       const snapshot = await uploadBytes(storageRef, blob);
       await post(snapshot);
     } catch (e) {
-      console.log(e);
       return "";
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <ScrollView>
       <Spinner
@@ -103,8 +100,8 @@ const AddProduct = () => {
                 <Image
                   source={{ uri: selectedImage }}
                   style={{
-                    width: imageBoxSize,
-                    height: imageBoxSize,
+                    width: 200,
+                    height: 200,
                     marginBottom: 20,
                     overflow: "hidden",
                     flex: 1,
@@ -124,7 +121,7 @@ const AddProduct = () => {
                 />
               )}
               {selectedImage && (
-                <View className="absolute bg-white p-2 rounded-full left-[55%] top-[45%]">
+                <View className="absolute bg-white p-2 rounded-full left-[45%] bottom-[0%]">
                   <FontAwesome
                     name="camera"
                     onPress={pickImage}

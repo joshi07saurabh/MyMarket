@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text,ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ListComponent from '../list/ListComponent'
 import { getAllProduct } from '../../database/getAllProduct'
@@ -28,14 +28,14 @@ if(productList.length  <=0){
 </View>
 }
   return (
-    <View className='flex flex-1 h-full bg-white'>
+    <ScrollView className='flex flex-1 bg-white'>
       
-      {productList.map((product)=>{
+      {productList.map((product,index)=>{
         return (
-          <ListComponent {...product}/>
+          <ListComponent key={index} {...product}/>
         )
       })}
-    </View>
+    </ScrollView>
   )
 }
 

@@ -42,14 +42,12 @@ const ShopFullProfile = ({ shopImage, shopName, contactDetails, userName = '', f
       // Check if there is a matching document
       if (!querySnapshot.empty) {
         // Assuming there's only one document with the given name, you can access it directly
-        console.log(querySnapshot.docs[0]);
         const userDocRef = querySnapshot.docs[0].ref;
         const updatedProfile = {
           ...profile,
           isShopOpen: !isShopOpen
         }
 
-        console.log(updatedProfile)
         await updateDoc(userDocRef, updatedProfile);
       }
   }

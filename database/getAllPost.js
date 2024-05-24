@@ -13,7 +13,6 @@ export const getPostImage =async (id)=>{
     return list || []
 }
 catch(err){
-    console.log(err)
     return []
 }
 return []

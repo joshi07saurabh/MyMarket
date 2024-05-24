@@ -8,9 +8,7 @@ const ShopUploadPhoto = () => {
   const [loading, setLoading] = useState(false);
 
   const selectPhoto = () => {
-    console.log('testih')
     ImagePicker.showImagePicker({ title: 'Select Photo' }, (response) => {
-      console.log(response,'hhhh');
       if (!response.didCancel) {
         setSelectedPhoto(response);
       }
@@ -34,11 +32,8 @@ const ShopUploadPhoto = () => {
         },
       });
 
-      console.log('Upload response:', response.data);
-
       // Handle success - navigate to success screen or display a success message
     } catch (error) {
-      console.error('Error uploading photo:', error);
       // Handle error - display an error message to the user
     } finally {
       setLoading(false);
