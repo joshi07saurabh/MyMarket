@@ -4,10 +4,13 @@ import ShopListItem from './ShopListItem'
 import data from '../../data/data.json'
 import { getAllShop } from '../../database/getAllShop'
 import useGetUser from '../../hooks/useGetUser'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { FIREBASE_APP, FIREBASE_AUTH } from '../../FirebaseConfig'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const ShopList = ({route}) => {
     const [shopData,setShopData] = useState([])
-    const currentUser = useGetUser();
+    const storage = AsyncStorage.getItem('profile')
     const [isRefreshing,setIsRefreshing] = useState(false)
     useEffect(()=>{
       getShopData()
@@ -19,6 +22,9 @@ const ShopList = ({route}) => {
     const getShopData = async ()=>{
       setIsRefreshing(true)
       const shopList =await getAllShop();
+      // const list = await shopList.filter(item => item.id === )
+      const user = await storage
+
       setShopData(shopList?.map((profile) => {
          return {
              "id":profile?.uid,

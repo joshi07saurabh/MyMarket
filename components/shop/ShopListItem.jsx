@@ -25,7 +25,7 @@ const ShopListItem = (profile) => {
         <Text className="text-[10px] text-gray-600 capitalize">{address}</Text>
         <Text className="text-[10px] text-gray-600 capitalize">{city}</Text>
         <Text className="text-[10px] text-gray-600 capitalize">{state}</Text>
-        <Text className="mt-auto mb-4 ml-auto">4.6&#9733;</Text>
+        
       </SafeAreaView>
     </SafeAreaView>
     </TouchableOpacity>

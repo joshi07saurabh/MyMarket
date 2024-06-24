@@ -26,9 +26,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
-const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id , isShopOpen}) => {
+const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,id , shopOpen}) => {
 
-
+  const [isShopOpen, setIsShopOpen] = useState(shopOpen)
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const currentLoggedUser = useGetUser()
@@ -65,6 +65,7 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
           addUser(updatedProfile)
         );
         setIsLoading(false)
+        setIsShopOpen(!isShopOpen)
       }
   }
   const editProfile = ()=>{
@@ -84,8 +85,8 @@ const Profile = ({ shopImage, name, contactDetails, userName = '', fullAddress,i
       text : 'OK',
       onPress : () => {
         setItemToAsyncStorage('isLoggedIn',false);
-    setItemToAsyncStorage('profile',{});
-    navigation.replace('Login')
+        setItemToAsyncStorage('profile',{});
+        navigation.replace('Login')
       }
     }
     ],

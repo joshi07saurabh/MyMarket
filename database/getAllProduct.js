@@ -11,6 +11,8 @@ export const getAllProduct =async (id)=>{
                 imageUrl: doc.data().imageURL,
                 productName: doc.data().description,
                 price: doc.data().price,
+                ownerId: doc.data().uid,
+                productId: doc.id
               })
         }
     }) 

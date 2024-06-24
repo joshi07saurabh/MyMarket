@@ -118,111 +118,61 @@ import { getAllShop } from "../database/getAllShop";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-
+import filter from "lodash.filter";
 // Assume getallshop function is defined elsewhere
 
 const Search = () => {
+  const currentUser = useGetUser();
   const [data, setData] = useState([]);
   const [shopData, setShopData] = useState([]);
   const [search, setSearch] = useState("");
   const searchRef = useRef();
   const fetchAllShopData = async () => {
-    const shop = await getAllShop();
-    setShopData(shop);
-    setData(
-      shop?.map((profile) => {
-        return {
-          id: profile?.uid,
-          name: profile?.shopName,
-          category: profile?.category || "New",
-          shopImage: profile?.imageURL,
-          address: profile?.mainAdd,
-          city: profile?.cityAdd,
-          state: profile?.stateAdd,
-          pin: profile?.pinAdd,
-          landmark: profile?.landmarkAdd,
-          fullAddress: `${profile?.mainAdd} ${profile?.landmark}, ${profile?.cityAdd}, ${profile?.stateAdd}`,
-          coordinate: [],
-          ownerName: profile?.Owner,
-          contactDetails: {
-            contact: profile?.mobileNumber,
-            email: profile?.email,
-          },
-          productList: [],
-          postList: [],
-          videoList: [],
-          isShopOpen: profile?.isShopOpen,
-          isUser: profile?.isUser,
-        };
-      })
-    );
+    const shop = await getAllShop(currentUser?.uid);
+    const d = shop?.map((profile) => {
+      return {
+        id: profile?.uid,
+        name: profile?.shopName,
+        category: profile?.category || "New",
+        shopImage: profile?.imageURL,
+        address: profile?.mainAdd,
+        city: profile?.cityAdd,
+        state: profile?.stateAdd,
+        pin: profile?.pinAdd,
+        landmark: profile?.landmarkAdd,
+        fullAddress: `${profile?.mainAdd} ${profile?.landmark}, ${profile?.cityAdd}, ${profile?.stateAdd}`,
+        coordinate: [],
+        ownerName: profile?.Owner,
+        contactDetails: {
+          contact: profile?.mobileNumber,
+          email: profile?.email,
+        },
+        productList: [],
+        postList: [],
+        videoList: [],
+        isShopOpen: profile?.isShopOpen,
+        isUser: profile?.isUser,
+      };
+    })
+    setData(d)
+    setShopData(d);
   };
 
   useEffect(() => {
-    fetchAllShopData(); 
-  },[]);
+    fetchAllShopData();
+  }, [currentUser]);
 
-  const fetchall = async (name) => {
-    const filteredData = shopData.filter((shopItem) =>
-      shopItem.shopName.toLowerCase().includes(name.toLowerCase())
+  const fetchall = (name) => {
+    console.log(shopData.length)
+    const d = JSON.parse(JSON.stringify(shopData))
+    const filteredData = d.filter((shopItem) =>
+      shopItem.name.toLowerCase().includes(name.toLowerCase())
     );
-    setData(
-      filteredData?.map((profile) => {
-        return {
-          id: profile?.uid,
-          name: profile?.shopName,
-          category: profile?.category || "New",
-          shopImage: profile?.imageURL,
-          address: profile?.mainAdd,
-          city: profile?.cityAdd,
-          state: profile?.stateAdd,
-          pin: profile?.pinAdd,
-          landmark: profile?.landmarkAdd,
-          fullAddress: `${profile?.mainAdd} ${profile?.landmark}, ${profile?.cityAdd}, ${profile?.stateAdd}`,
-          coordinate: [],
-          ownerName: profile?.Owner,
-          contactDetails: {
-            contact: profile?.mobileNumber,
-            email: profile?.email,
-          },
-          productList: [],
-          postList: [],
-          videoList: [],
-          isShopOpen: profile?.isShopOpen,
-          isUser: profile?.isUser,
-        };
-      })
-    );
+    setData(filteredData);
   };
   const onSearch = (text) => {
     if (text == "") {
-      setData(
-        shopData?.map((profile) => {
-          return {
-            id: profile?.uid,
-            name: profile?.shopName,
-            category: profile?.category || "New",
-            shopImage: profile?.imageURL,
-            address: profile?.mainAdd,
-            city: profile?.cityAdd,
-            state: profile?.stateAdd,
-            pin: profile?.pinAdd,
-            landmark: profile?.landmarkAdd,
-            fullAddress: `${profile?.mainAdd} ${profile?.landmark}, ${profile?.cityAdd}, ${profile?.stateAdd}`,
-            coordinate: [],
-            ownerName: profile?.Owner,
-            contactDetails: {
-              contact: profile?.mobileNumber,
-              email: profile?.email,
-            },
-            productList: [],
-            postList: [],
-            videoList: [],
-            isShopOpen: profile?.isShopOpen,
-            isUser: profile?.isUser,
-          };
-        })
-      );
+      fetchAllShopData()
     } else {
       fetchall(text);
     }
@@ -247,27 +197,20 @@ const Search = () => {
           ref={searchRef}
           placeholder="Search"
           onChangeText={(text) => {
-            onSearch(text);
             setSearch(text);
+            onSearch(text);
           }}
           value={search}
           style={{ width: "76%", height: 50 }}
         ></TextInput>
-        {search == "" ? null : (
-          <TouchableOpacity
-            style={{ marginRight: 15 }}
-            onPress={() => {
-              searchRef.current.clear();
-              onSearch("");
-              setSearch("");
-            }}
-          ></TouchableOpacity>
-        )}
       </View>
       <View>
-        {data.map((dataItem) => {
+        {data.map((dataItem,index) => {
           return (
-            <TouchableOpacity key={dataItem.name}  onPress={() => goToShopProfile(dataItem)}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => goToShopProfile(dataItem)}
+            >
               <View className="flex flex-row bg-white m-1 rounded-md shadow-sm shadow-black">
                 <View>
                   <Image

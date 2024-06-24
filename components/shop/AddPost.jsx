@@ -8,9 +8,11 @@ import { getAuth } from 'firebase/auth';
 import { getURL } from '../../utils/getDownloadUrl';
 import useGetUser from '../../hooks/useGetUser';
 import { useNavigation } from '@react-navigation/native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const AddPost = () => {
   const defaultURL = 'https://i.pinimg.com/736x/61/54/18/61541805b3069740ecd60d483741e5bb.jpg'
+  const [isLoading , setLoading] = useState(false)
   const [selectedImage, setSelectedImage] = useState(defaultURL);
   const [selectedImageName, setSelectedImageName] = useState('');
   const profile = useGetUser();
@@ -34,10 +36,12 @@ const AddPost = () => {
   };
 
   const post = async (snapshot) => {
+    setLoading(true);
     const URL =await getURL(snapshot.metadata.fullPath)
     await uploadToPostTable(URL,profile?.uid)
     setSelectedImage(defaultURL)
     setSelectedImageName('')
+    setLoading(false)
     navigation.navigate('ShopProfile')
   }
 
@@ -57,6 +61,12 @@ const AddPost = () => {
   const windowWidth = Dimensions.get('window').width;
   const imageBoxSize = windowWidth - 40;
   return (
+    <View>
+            <Spinner
+          visible={isLoading}
+          textContent={'Uploading Post...'}
+          textStyle={{color: '#FFF'}}
+        />
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
       {selectedImage ? (
         <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200, marginBottom: 20, overflow:'hidden', flex:1, borderColor:'black',borderRadius:10, }}  className=''/>
@@ -67,8 +77,9 @@ const AddPost = () => {
       <Button title="Choose Image" onPress={pickImage} color={'black'}  />
 
       <View style={{ marginTop: 20 }}>
-        <Button title="Upload Image" onPress={uploadImage}color={'black'} disabled={!selectedImage} />
+        <Button title="Upload Image" onPress={uploadImage}color={'black'} disabled={!selectedImage || selectedImage===defaultURL} />
       </View>
+    </View>
     </View>
   );
 };

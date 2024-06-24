@@ -1,11 +1,18 @@
-import { View, Text,ScrollView } from 'react-native'
+import { View, Text,ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ListComponent from '../list/ListComponent'
 import { getAllProduct } from '../../database/getAllProduct'
+import { useNavigation } from '@react-navigation/native'
 
 const ShopProfileProductTab = ({id}) => {
+  const navigation = useNavigation();
   const [productList,setProductList] = useState([])
   const [isLoading, setIsLoading] = useState(false);
+
+  const goToImage = (product) => {
+    console.log('product',product)
+    navigation.navigate("ProductDetail", { product: product, id: product.productId, postOwnerId: product.ownerId });
+  };
 
   useEffect(()=>{
     fetchProducts()
@@ -32,7 +39,9 @@ if(productList.length  <=0){
       
       {productList.map((product,index)=>{
         return (
+          <TouchableOpacity onPress={()=>goToImage(product)}>
           <ListComponent key={index} {...product}/>
+          </TouchableOpacity>
         )
       })}
     </ScrollView>

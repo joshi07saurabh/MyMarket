@@ -91,7 +91,7 @@ const ShopEditProfile = () => {
       }
       // navigation.goBack(null)
     } catch (e) {
-      setError("Something went wrong!");
+      setError("Something went wrong!"+JSON.stringify(e));
     } finally {
       setIsLoading(false);
     }
@@ -113,8 +113,6 @@ const ShopEditProfile = () => {
       if (!canceled) {
         setSelectedImage(assets[0].uri);
         setSelectedImageName(assets[0].fileName);
-
-        
       }
     } catch (error) {
     }

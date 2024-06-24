@@ -68,6 +68,10 @@ const AddProduct = () => {
     navigation.navigate("ShopProfile");
   };
 
+  const isDisabled = ()=>{
+    return !selectedImage || (selectedImage === defaultURL) || !price || !desc
+  }
+
   const uploadImage = async () => {
     try {
       // Implement image upload logic here
@@ -169,10 +173,10 @@ const AddProduct = () => {
 
             <TouchableOpacity
               className={`bg-gray-300 p-4 rounded-md mt-4 ${
-                price && selectedImage && desc ? "bg-black" : ""
+                !isDisabled() ? "bg-black" : ""
               }`}
               onPress={uploadImage}
-              disabled={!price || !selectedImage || !desc}
+              disabled={isDisabled()}
             >
               <Text style={styles.panelButtonTitle} className="text-center">
                 Submit

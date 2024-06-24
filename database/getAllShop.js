@@ -1,10 +1,10 @@
 import { collection, getDocs } from "firebase/firestore"
 import { FIRESTORE_DB } from "../FirebaseConfig"
 
-export const getAllShop =async ()=>{
+export const getAllShop =async (id='')=>{
     try{
-    const list = []
     const shopProfile =  await getDocs(collection(FIRESTORE_DB,'shopProfile'))
+    const list = []
    shopProfile.forEach((doc)=> {
         list.push(doc.data())
     }) 
@@ -13,5 +13,4 @@ export const getAllShop =async ()=>{
 catch(err){
     return []
 }
-return []
 }
